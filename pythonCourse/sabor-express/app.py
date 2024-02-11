@@ -30,14 +30,15 @@ def show_options(options: list):
 def run_option(selected_option: int, options: list):
     """Executes the selected option in the options available"""
     print(f"You select: {selected_option}\n")
-    if selected_option == 1:
-        print(options[0])
-    elif selected_option == 2:
-        print(options[1])
-    elif selected_option == 3:
-        print(options[2])
-    else:
-        exit_app()
+    match selected_option:
+        case 1:
+            print(options[0])
+        case 2:
+            print(options[1])
+        case 3:
+            print(options[2])
+        case _:
+            exit_app()
 
 
 def main():
