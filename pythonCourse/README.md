@@ -62,3 +62,30 @@ To see the type of a variable you can use `type(variable)`
 
 To convert types you can use something like this `int(variable)` or `str(variable)`.
 > This is valid for any type in python
+
+### Functions and imports
+
+To declare a function you can follow the syntax `def function_name(param1,param2)`
+
+To import some functions from a build in library in python you can use
+`import library_name`
+
+To declare the main function (Others files cannot import anything from this file), you can follow the example in below:
+
+```py
+if __name__ == '__main__':
+    # run the main functionality
+```
+### Conditionals
+
+Other conditional used in python is the syntax match/case
+
+```py
+ match variable:
+    case condition_1:
+      # do something
+    case condition_2:
+      # do another thing
+    case _:
+      # default (no match any case above)
+```
