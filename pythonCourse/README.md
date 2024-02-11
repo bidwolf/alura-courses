@@ -31,6 +31,7 @@ Also, you can use formatted string using:
 variable = "test"
 formatted = f"{variable} formatted" # -> "test formated"
 ```
+Also you can prompt to the user asking him to input some value, this can be done using the `input(message_input)` function
 
 ### If/else
 
@@ -43,3 +44,21 @@ if condition:
   else:
     # Another thing too, and the last in this if/else statement
 ```
+
+### Types
+
+Python is a strongly typed language, and because of this, you cannot compare, two different types.
+See the example below :
+```py
+my_number = 1
+my_input = input('type a number:') # this is a str anyway
+print(isinstance(my_input,str)) # -> True
+if my_input == '1':
+  print(my_input ==my_number) # -> False
+
+```
+
+To see the type of a variable you can use `type(variable)`
+
+To convert types you can use something like this `int(variable)` or `str(variable)`.
+> This is valid for any type in python

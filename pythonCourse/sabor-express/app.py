@@ -10,14 +10,14 @@ options = [
     "4. exit",
 ]
 between_break_lines(options)
-selected_option = input("select one option:")
+selected_option = int(input("select one option:"))
 print(f"You select: {selected_option}\n")
 # Actually we have a better way to do that
-if selected_option == "1":
+if selected_option == 1:
     print(options[0])
-elif selected_option == "2":
+elif selected_option == 2:
     print(options[1])
-elif selected_option == "3":
+elif selected_option == 3:
     print(options[2])
 else:
     print(options[3])
