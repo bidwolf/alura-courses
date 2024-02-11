@@ -15,3 +15,31 @@ To configure your project you can need to follow these steps:
 to allow the terminal to use the python created in your virtual environment.
 
 3. read the `/requirements.txt` to install the requirements.
+
+## Chapters
+
+Is where we can understand each knowledge separated in different topics in python.
+
+### Strings
+
+In python you can declare a string with single quote, or double quote.
+The type of string in python is `str`.
+
+You can concatenate strings with + as any based on `c` language can.
+Also, you can use formatted string using:
+```py
+variable = "test"
+formatted = f"{variable} formatted" # -> "test formated"
+```
+
+### If/else
+
+In python the if/else statement is due like this:
+```py
+if condition:
+   # do something
+  elif another_condition:
+    # do another thing
+  else:
+    # Another thing too, and the last in this if/else statement
+```

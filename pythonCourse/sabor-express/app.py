@@ -1,39 +1,23 @@
 """Module focused on python course of Alura"""
 
-
-def between_break_lines(word: str) -> None:
-    """Print each letter of the word between break lines"""
-    for letter in word:
-        print(f"{letter}\n")
-
+from challenges.between_break_lines import between_break_lines
 
 print("Sabor Express\n")
 options = [
-    "1. Cadastrar restaurante",
-    "2. Listar restaurante",
-    "3. Ativar restaurante",
-    "4. Sair",
+    "1. Register restaurant",
+    "2. List restaurant",
+    "3. Activate restaurant",
+    "4. exit",
 ]
 between_break_lines(options)
 selected_option = input("select one option:")
 print(f"You select: {selected_option}\n")
-
-print("Python on Alura Programming School \n")
-
-# Usando loop
-between_break_lines("ALURA")
-
-# Usando Sep
-print("A", "L", "U", "R", "A", sep="\n")
-
-PI = 3.14159
-
-# Usando Round
-print(f"{round(PI, 2)}")
-# Usando o método f-string
-print(f"{PI:.2f}")
-# Usando f-string
-print(f"{PI:.2f}")
-
-NAME = "Henrique de Paula Rodrigues"
-AGE = 23
+# Actually we have a better way to do that
+if selected_option == "1":
+    print(options[0])
+elif selected_option == "2":
+    print(options[1])
+elif selected_option == "3":
+    print(options[2])
+else:
+    print(options[3])
