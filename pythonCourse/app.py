@@ -1,7 +1,9 @@
 """Module focused on python course of Alura"""
 
 import os
-from challenges.between_break_lines import between_break_lines
+from src.challenges.between_break_lines import between_break_lines
+from src.challenges.challenge_1 import challenge_1
+from src.challenges.challenge_2 import challenge_2
 
 RESTAURANTS = []
 
@@ -88,6 +90,11 @@ def main():
         if isinstance(exception, ValueError):
             print("You must type a integer number dude.\n")
         rerun_app()
+    print("------------------CHALLENGES------------------\n")
+    print("challenge one: strings\n")
+    challenge_1()
+    print("\nchallenge two: exceptions and if/else statement\n")
+    challenge_2()
 
 
 if __name__ == "__main__":

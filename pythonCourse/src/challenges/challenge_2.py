@@ -71,22 +71,24 @@ def verify_quadrant(x: float, y: float) -> str:
     return "the point is in the third quadrant"
 
 
-# 1. tell if a number is odd or even
-asked_number = int(input("Please type a number:\n"))
-RESULT_1 = odd_or_even(number=asked_number)
-print(f"The number is {RESULT_1}.")
-# 2. Tell if the asked age is of a child, adolescent, or an adult
-asked_age = int(input("Please tell me your age:\n"))
-RESULT_2 = categorize_by_age(age=asked_age)
-print(f"The age is of a {RESULT_2}.")
-# 3. Tell if the name and password match the requirements
-asked_name = input("Please insert your name:\n")
-asked_password = input("Please insert a password:\n")
-RESULT_3 = verify_password(password=asked_password)
-RESULT_4 = verify_name(name=asked_name)
-print(f"{RESULT_4}, and {RESULT_3}")
-# 4. Tell what quadrant a point pertences
-coordinate_x = float(input("Please insert the x coordinate:\n"))
-coordinate_y = float(input("Please insert the y coordinate:\n"))
-RESULT_5 = verify_quadrant(x=coordinate_x, y=coordinate_y)
-print(f"{RESULT_5}")
+def challenge_2():
+    """the second challenge"""
+    # 1. tell if a number is odd or even
+    asked_number = int(input("Please type a number:\n"))
+    result_1 = odd_or_even(number=asked_number)
+    print(f"The number is {result_1}.")
+    # 2. Tell if the asked age is of a child, adolescent, or an adult
+    asked_age = int(input("Please tell me your age:\n"))
+    result_2 = categorize_by_age(age=asked_age)
+    print(f"The age is of a {result_2}.")
+    # 3. Tell if the name and password match the requirements
+    asked_name = input("Please insert your name:\n")
+    asked_password = input("Please insert a password:\n")
+    result_3 = verify_password(password=asked_password)
+    result_4 = verify_name(name=asked_name)
+    print(f"{result_4}, and {result_3}")
+    # 4. Tell what quadrant a point pertences
+    coordinate_x = float(input("Please insert the x coordinate:\n"))
+    coordinate_y = float(input("Please insert the y coordinate:\n"))
+    result_5 = verify_quadrant(x=coordinate_x, y=coordinate_y)
+    print(f"{result_5}")
