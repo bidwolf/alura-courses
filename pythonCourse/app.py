@@ -4,6 +4,7 @@ import os
 from src.challenges.between_break_lines import between_break_lines
 from src.challenges.challenge_1 import challenge_1
 from src.challenges.challenge_2 import challenge_2
+from src.challenges.challenge_3 import challenge_3
 
 RESTAURANTS = []
 
@@ -91,10 +92,12 @@ def main():
             print("You must type a integer number dude.\n")
         rerun_app()
     print("------------------CHALLENGES------------------\n")
-    print("challenge one: strings\n")
-    challenge_1()
-    print("\nchallenge two: exceptions and if/else statement\n")
-    challenge_2()
+    # print("challenge one: strings\n")
+    # challenge_1()
+    # print("\nchallenge two: exceptions and if/else statement\n")
+    # challenge_2()
+    print("\nchallenge three: lists and for loop\n")
+    challenge_3()
 
 
 if __name__ == "__main__":
