@@ -124,3 +124,7 @@ my_list = ["example_1","example_2"]
 for index,item in enumerate(my_list):
   print(item,index) # -> Prints the current item with the current index (example_1 0 or example_2 1)
 ```
+
+Some examples on this chapter may require to make a summation of a list of numbers.
+Actually python has this already made, the function name is sum, and you can pass to it a list of numbers,
+making more easy doing that kind of stuff.
