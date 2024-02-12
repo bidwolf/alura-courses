@@ -106,3 +106,21 @@ try:
 except Exception as exception:
   # do something with the exception info
 ```
+### Lists
+
+To declare a list is pretty common. just declare the variable with a `[]`
+
+To loop in a list you can use the `for`loop:
+
+```py
+my_list = ["example_1","example_2"]
+for item in my_list:
+  print(item) # -> Prints the current item (example_1 or example_2)
+```
+
+You can also use the enumerate(list) to get the index in your list
+```py
+my_list = ["example_1","example_2"]
+for index,item in enumerate(my_list):
+  print(item,index) # -> Prints the current item with the current index (example_1 0 or example_2 1)
+```

@@ -3,6 +3,8 @@
 import os
 from challenges.between_break_lines import between_break_lines
 
+RESTAURANTS = []
+
 
 def clear_prompt():
     """This function clear the prompt"""
@@ -32,7 +34,7 @@ def show_options(options: list):
     between_break_lines(word=options)
 
 
-def invalid_option():
+def rerun_app():
     """THis function re-run the app after the user type any key"""
     input("Type any key to come back to the menu:")
     main()
@@ -44,15 +46,34 @@ def run_option(selected_option: int, options: list):
     match selected_option:
         case 1:
             print(options[0])
+            new_restaurant = input("Type the restaurant name:\n")
+            register_new_restaurant(restaurant_name=new_restaurant)
         case 2:
             print(options[1])
+            list_restaurants()
         case 3:
             print(options[2])
         case 4:
             exit_app()
         case _:
             print(f"{selected_option} is not a valid option dude.\n")
-            invalid_option()
+            rerun_app()
+
+
+def register_new_restaurant(restaurant_name: str):
+    """This function add a restaurant in the restaurant list"""
+    if restaurant_name not in RESTAURANTS:
+        RESTAURANTS.append(restaurant_name)
+    print("Restaurant added successfully!")
+    rerun_app()
+
+
+def list_restaurants():
+    """List the Restaurant list"""
+    print("\n| Restaurant_id\t| Restaurant_name |\t")
+    for index, restaurant in enumerate(RESTAURANTS):
+        print(f"| {index}\t| {restaurant} |\t")
+    rerun_app()
 
 
 def main():
@@ -66,7 +87,7 @@ def main():
     except ValueError as exception:
         if isinstance(exception, ValueError):
             print("You must type a integer number dude.\n")
-        invalid_option()
+        rerun_app()
 
 
 if __name__ == "__main__":
