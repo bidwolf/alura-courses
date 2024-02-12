@@ -89,3 +89,20 @@ Other conditional used in python is the syntax match/case
     case _:
       # default (no match any case above)
 ```
+
+### Try/except
+
+The block `try/except` syntax is:
+
+```py
+try:
+  #do something
+except:
+  # Something go wrong
+
+# you can also catch the exception by doing something like this:
+try:
+  # Do another thing
+except Exception as exception:
+  # do something with the exception info
+```
