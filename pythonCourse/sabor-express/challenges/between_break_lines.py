@@ -1,0 +1,9 @@
+"""
+Module responsible to break lines between letters of a word
+"""
+
+
+def between_break_lines(word: str | list) -> None:
+    """Print each letter of the word between break lines"""
+    for letter in word:
+        print(f"{letter}\n")
