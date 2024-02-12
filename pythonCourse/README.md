@@ -89,3 +89,42 @@ Other conditional used in python is the syntax match/case
     case _:
       # default (no match any case above)
 ```
+
+### Try/except
+
+The block `try/except` syntax is:
+
+```py
+try:
+  #do something
+except:
+  # Something go wrong
+
+# you can also catch the exception by doing something like this:
+try:
+  # Do another thing
+except Exception as exception:
+  # do something with the exception info
+```
+### Lists
+
+To declare a list is pretty common. just declare the variable with a `[]`
+
+To loop in a list you can use the `for`loop:
+
+```py
+my_list = ["example_1","example_2"]
+for item in my_list:
+  print(item) # -> Prints the current item (example_1 or example_2)
+```
+
+You can also use the enumerate(list) to get the index in your list
+```py
+my_list = ["example_1","example_2"]
+for index,item in enumerate(my_list):
+  print(item,index) # -> Prints the current item with the current index (example_1 0 or example_2 1)
+```
+
+Some examples on this chapter may require to make a summation of a list of numbers.
+Actually python has this already made, the function name is sum, and you can pass to it a list of numbers,
+making more easy doing that kind of stuff.
