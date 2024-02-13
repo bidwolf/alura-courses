@@ -155,3 +155,43 @@ Docstring provides documentation for your modules, functions and classes. Highly
 
 - Need to be in the first line of the module, function or class
 - is implemented between """ and can be multiline in that way.
+
+## Object orientation Paradigm (OOP)
+This is a powerful paradigm of programming that is used in the whole world, and you will take some contact with that in this course.
+### Classes
+
+Classes are the fundamental building blocks of object-oriented programming in Python.
+They allow you to define a blueprint for creating objects with their own properties and behaviors.
+By using classes, you can organize your code into reusable and modular components.
+
+To create a class in python, it's simple:
+
+```py
+class YourClassName :
+    property_1:''
+    property_2:2
+    property_3:False
+
+```
+#### Instances
+
+To create a instance you can use ` instance_obj = YourClassName()
+But that is not all, you can access properties, and update those properties:
+
+```py
+class YourClassName :
+    property_1='test'
+    property_2=2
+    property_3=False
+
+instance = YourClassName()
+print(instance.property_1) # -> throws a error
+instance.property_1 = 'new atribute'
+print(instance.property_1) # -> 'new atribute'
+
+```
+>[!NOTE]
+> You can see all atributes of a class using `dir(instance)` that return a dictionary 
+> including default ones (all classes have those, something like `__shared_property__`).
+>
+> You can also see all atributes uniques of a class using `vars(instance)` that return a dictionary only with attributes of that class.
