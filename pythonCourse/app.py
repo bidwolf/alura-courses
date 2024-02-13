@@ -6,12 +6,52 @@ from src.challenges.challenge_1 import challenge_1
 from src.challenges.challenge_2 import challenge_2
 from src.challenges.challenge_3 import challenge_3
 from src.challenges.challenge_4 import challenge_4
+from src.challenges.challenge_5 import challenge_5
+from src.models.restaurants import Restaurant
 
 RESTAURANTS = []
 RESTAURANT_DICT = [
     {"name": "BK", "category": "hamburgers", "active": False},
     {"name": "MCDonald's", "category": "hamburgers", "active": False},
 ]
+VERSIONS = [
+    {
+        "version": 1,
+        "description": "Using only strings, lists to register a restaurant and see all created restaurants",
+    },
+    {
+        "version": 2,
+        "description": "Using dictionaries to create and list restaurants and turn it active/disable",
+    },
+    {"version": 3, "description": "Using classes and OOP to implements the logic"},
+]
+
+
+def print_line(character: str, repeat: int):
+    """Print the {str} in {repeat} times"""
+    print(f"{character*repeat}")
+
+
+def show_version_menu():
+    """Defines a menu that show all versions available"""
+    print_line("*", 120)
+    available_versions = []
+    for version in VERSIONS:
+        print(f"\n{version.get('version')} . {version.get('description')}")
+        available_versions.append(version.get("version"))
+    print("\n")
+    print_line("*", 120)
+    try:
+        version = int(input("Please select a version:\n"))
+    except ValueError as exception:
+        if isinstance(exception, ValueError):
+            print("Please insert a valid option.")
+            show_version_menu()
+    if version in available_versions:
+        run_app(version=version)
+    else:
+        print("This version is not available!")
+        show_version_menu()
 
 
 def clear_prompt():
@@ -39,7 +79,7 @@ def show_options(options: list):
 def rerun_app(version=1):
     """THis function re-run the app after the user type any key"""
     input("Type any key to come back to the menu:")
-    main(version=version)
+    run_app(version=version)
 
 
 def run_option(selected_option: int, options: list, version=1):
@@ -77,11 +117,9 @@ def run_option(selected_option: int, options: list, version=1):
                 )
             rerun_app(version=version)
         case 4:
-            print(options[3])
-            if version == 1:
-                main(version=2)
-            elif version == 2:
-                main(version=1)
+            clear_prompt()
+            print(f"Selected option: {options[3]}")
+            show_version_menu()
         case 5:
             exit_app()
         case _:
@@ -170,10 +208,11 @@ def list_restaurants_dict():
 
 def run_app(version=1):
     """This function runs the main app"""
+    clear_prompt()
     try:
         print("Sabor Express\n")
         print(f"------------------ VERSION  {version} ------------------\n")
-        options_available = get_options_available(version=version)
+        options_available = get_options_available()
         show_options(options_available)
         selected_option = int(input("select one option:\n"))
         run_option(selected_option, options=options_available, version=version)
@@ -183,13 +222,13 @@ def run_app(version=1):
         rerun_app(version=version)
 
 
-def get_options_available(version=1):
+def get_options_available():
     """This function gets the available options based on the current version"""
     options_available = [
         "1. Register restaurant",
         "2. List restaurant",
         "3. Activate/disable restaurant",
-        "4. Change to version 2" if version == 1 else "4. Change to version 1",
+        "4. Change version",
         "5. exit",
     ]
     return options_available
@@ -210,17 +249,22 @@ def run_challenge(number: int):
         case 4:
             print("\nchallenge four: dictionaries\n")
             challenge_4()
+        case 5:
+            print("\nchallenge five: dictionaries\n")
+            challenge_5()
         case _:
             print("NOT NOT\n")
 
 
-def main(version=1):
+def main():
     """The main Function"""
     clear_prompt()
-    run_app(version=version)
-    print("------------------ CHALLENGES ------------------\n")
-    for i in range(5):
+    # print("------------------ CHALLENGES ------------------\n")
+    for i in range(5, 6):
         run_challenge(number=i)
+    # show_version_menu()
+    burger_king_restaurant = Restaurant()
+    print(vars(burger_king_restaurant))
 
 
 if __name__ == "__main__":
