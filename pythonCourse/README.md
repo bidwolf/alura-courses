@@ -303,4 +303,46 @@ test = NewClassWithDecoratorProperty(a=2,c="test")
 print(test) # -> 2 ok test
 ```
 
+>[!TIP]
 > That decorator is useful for situations where your code need to send a different information based in others parameters. Or you need to access a protected information in your class in your class instance
+
+#### @classmethod and @staticmethod
+
+Both are **decorators** in python, but each one has a unique reason to exist.
+
+- The **@classmethod** is responsible to provide to the method created with him access only for the class itself or the object that represents the class.
+Which means that a method created with that decorator cannot change atributes from the instance of that class. But it can change atributes from the class.
+
+- The **@staticmethod** cannot access any information about the class were it was defined, by doing this, static methods decorator turn the method just a namespace in that class.
+
+Example:
+```py
+class Test:
+  property_1='Class property'
+  def __init__(self,instance_property):
+    self.instance_property = instance_property
+  @classmethod
+  def class_method(cls): # cls is the object that represents the class
+    print(cls.property_1) # -> 'Class property'
+    # print(self.instance_property) -> raises an error
+    # because that method cannot have access to the instance property. 
+    cls.property_1='abc'
+  
+  @staticmethod
+  def static_method(prop_1): # cannot access any information about the class
+    # can be accessed outside a class instance
+    print(prop_1) # the property passed to that static method
+    # print(self) -> raises a error, self not exists in that scope
+    # print(property_1) -> raises a error, this variable not exists in that scope
+test = Test(instance_property='instance')
+# -> prints 'test outside' in the console
+Test.static_method('test outside') # (not a class instance)
+test.static_method('test inside') # -> prints 'test inside' in the console
+test.class_method() # -> prints the test.property_1 value
+``` 
+
+>[!TIP]
+>we have a section about decorators [here](#decorators).
+### Decorators
+<!-- TODO : Provide a understandable documentation about decorators in Python -->
+

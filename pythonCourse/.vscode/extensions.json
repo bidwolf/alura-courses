@@ -1,6 +1,8 @@
 {
   "recommendations": [
     "ms-python.black-formatter",
-    "ms-python.pylint"
+    "ms-python.pylint",
+    "yzhang.markdown-all-in-one",
+    "bierner.markdown-preview-github-styles"
   ]
 }
