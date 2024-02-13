@@ -148,3 +148,10 @@ print(variable.get('key')) # -> 'another_value'
 > - update method allow us to update existent keys in our dictionary 
 > - get method allow us to get a value from a key in our dictionary
 > - You cannot update a value from dictionary by doing something like this `dictionary.key = value`
+
+### Docstring
+
+Docstring provides documentation for your modules, functions and classes. Highly recommended for methods that you'll reuse after a while.
+
+- Need to be in the first line of the module, function or class
+- is implemented between """ and can be multiline in that way.
