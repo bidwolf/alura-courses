@@ -132,7 +132,7 @@ making more easy doing that kind of stuff.
 ### Dicionaries
 
 Dicionaries are the a variable type that have properties that can be
-accessed with `variable["property"]` or `variable.property` very much like objects, but with some differences
+accessed with `variable["property"]` or `variable.get('property')` very much like objects, but with some differences
 
 To declare a dictionary you can follow the example below:
 
@@ -194,7 +194,7 @@ print(instance.property_1) # -> 'new atribute'
 > You can see all atributes of a class using `dir(instance)` that return a dictionary 
 > including default ones (all classes have those, something like `__shared_property__`).
 >
-> You can also see all atributes uniques of a class using `vars(instance)` that return a dictionary only with attributes of that class.
+> You can also see all atributes uniques of a class using `vars(instance)` that return a dictionary only with attributes of the instance of that class.
 
 ### Constructors
 
@@ -215,8 +215,8 @@ print(instance.property_3) # -> False (default attribution )
 
 ```
 >[!NOTE]
-> The self means the scope of the class, where self is a reference to the current instance
-> You always must pass self in the first parameter
+> The self means the scope of the class, where self is a reference to the current instance.
+> You always must pass self in the first parameter in a instance method.
 
 ### Methods
 Methods are functions that a Class can use to provide to the instance the rules applied to them
@@ -235,14 +235,12 @@ In the `special methods section` we have contact with the following methods:
         print(f"\{p1:{self.property_1},p2:{self.property_2},p3:{self.property_3}\}")
   instance = YourClassName(instance = YourClassName(property_1='first',property_2='second')
   print(instance) # -> {p1:'first',p2:'second',p3:False}
-)
     ```
 #### Method definition
 
 Methods can be private to the Class, meaning that only instances of that class can use them.
 An example can be the method `__str__`, that only instances of a class have access.
-Methods can also be public, meaning that anyone can call that method. An example of a public method
-is the `__init__` method, anyone can use the constructor of a specific class to create an instance of it.
+Methods can also be public, meaning that anyone can call that method.
 
 Also, methods can be created to attend your needs, see the following example:
 
@@ -337,6 +335,8 @@ class Test:
 test = Test(instance_property='instance')
 # -> prints 'test outside' in the console
 Test.static_method('test outside') # (not a class instance)
+# -> prints 'test.property_1' in the console
+Test.class_method() # (not a class instance)
 test.static_method('test inside') # -> prints 'test inside' in the console
 test.class_method() # -> prints the test.property_1 value
 ``` 
