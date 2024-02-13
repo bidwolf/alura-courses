@@ -263,7 +263,7 @@ def main():
     for i in range(5, 6):
         run_challenge(number=i)
     # show_version_menu()
-    burger_king_restaurant = Restaurant()
+    burger_king_restaurant = Restaurant(name="Burger King", category="Hamburger")
     print(vars(burger_king_restaurant))
 
 
