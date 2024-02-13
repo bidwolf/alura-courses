@@ -128,3 +128,23 @@ for index,item in enumerate(my_list):
 Some examples on this chapter may require to make a summation of a list of numbers.
 Actually python has this already made, the function name is sum, and you can pass to it a list of numbers,
 making more easy doing that kind of stuff.
+
+### Dicionaries
+
+Dicionaries are the a variable type that have properties that can be
+accessed with `variable["property"]` or `variable.property` very much like objects, but with some differences
+
+To declare a dictionary you can follow the example below:
+
+```py
+variable = { 'key':'value'}
+print(variable['key']) # -> 'value'
+for value in variable:
+    print (value) # -> 'value'
+variable.update({'key':'another_value'})  
+print(variable.get('key')) # -> 'another_value'
+```
+>[!NOTE]
+> - update method allow us to update existent keys in our dictionary 
+> - get method allow us to get a value from a key in our dictionary
+> - You cannot update a value from dictionary by doing something like this `dictionary.key = value`
