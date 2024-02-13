@@ -1,6 +1,6 @@
 """Module to contains the 5th challenge"""
 
-from src.models.restaurants import Restaurant
+from src.models.restaurant import Restaurant
 
 
 def challenge_5():
