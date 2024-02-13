@@ -7,7 +7,7 @@ from src.challenges.challenge_2 import challenge_2
 from src.challenges.challenge_3 import challenge_3
 from src.challenges.challenge_4 import challenge_4
 from src.challenges.challenge_5 import challenge_5
-from src.models.restaurants import Restaurant
+from src.models.application import Application
 
 RESTAURANTS = []
 RESTAURANT_DICT = [
@@ -17,11 +17,13 @@ RESTAURANT_DICT = [
 VERSIONS = [
     {
         "version": 1,
-        "description": "Using only strings, lists to register a restaurant and see all created restaurants",
+        "description": "Using only strings, lists to register a restaurant"
+        + " and see all created restaurants",
     },
     {
         "version": 2,
-        "description": "Using dictionaries to create and list restaurants and turn it active/disable",
+        "description": "Using dictionaries to create and list restaurants"
+        + "and turn it active/disable",
     },
     {"version": 3, "description": "Using classes and OOP to implements the logic"},
 ]
@@ -256,15 +258,21 @@ def run_challenge(number: int):
             print("NOT NOT\n")
 
 
+app = Application()
+
+
 def main():
     """The main Function"""
-    clear_prompt()
-    # print("------------------ CHALLENGES ------------------\n")
-    for i in range(5, 6):
-        run_challenge(number=i)
-    # show_version_menu()
-    burger_king_restaurant = Restaurant(name="Burger King", category="Hamburger")
-    print(vars(burger_king_restaurant))
+    # clear_prompt()
+    # # print("------------------ CHALLENGES ------------------\n")
+    # for i in range(5, 6):
+    #     run_challenge(number=i)
+    # # show_version_menu()
+    # burger_king_restaurant = Restaurant(name="Burger King", category="Hamburger")
+    # print(vars(burger_king_restaurant))
+    app.run()
+    app.bump_version(bump_type="PATCH")
+    print(app)
 
 
 if __name__ == "__main__":
