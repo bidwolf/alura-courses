@@ -29,7 +29,7 @@ You can concatenate strings with + as any based on `c` language can.
 Also, you can use formatted string using:
 ```py
 variable = "test"
-formatted = f"{variable} formatted" # -> "test formated"
+formatted = f"{variable} formatted" # -> "test formatted"
 ```
 Also you can prompt to the user asking him to input some value, this can be done using the `input(message_input)` function
 
@@ -195,3 +195,88 @@ print(instance.property_1) # -> 'new atribute'
 > including default ones (all classes have those, something like `__shared_property__`).
 >
 > You can also see all atributes uniques of a class using `vars(instance)` that return a dictionary only with attributes of that class.
+
+### Constructors
+
+Constructors turn classes into instances, basically is the function that will be called when the instance is created.
+Let's see an example of how to customize the constructor of a class:
+
+```py
+class YourClassName :
+    property_1=''
+    property_2=int
+    property_3=False
+    def __init__(self,property_1,property_2): # The constructor of that class
+        self.property_1 = property_1 
+        self.property_2 = property_2
+instance = YourClassName(property_1='first',property_2='second')
+print(instance.property_1) # -> 'first'
+print(instance.property_3) # -> False (default attribution )
+
+```
+>[!NOTE]
+> The self means the scope of the class, where self is a reference to the current instance
+> You always must pass self in the first parameter
+
+### Methods
+Methods are functions that a Class can use to provide to the instance the rules applied to them
+You can think that is what your instance can do.
+
+#### Special Methods
+
+In classes we have some special methods that we can use for different purposes, one example is the
+`__init__` method that is responsible to create the class instance.
+In the `special methods section` we have contact with the following methods:
+
+- `__str__`: responsible to the result when the instance is converted to string (like in `print(instance)`)
+    ```py
+    #... class YourClassName
+    __str__(self):
+        print(f"\{p1:{self.property_1},p2:{self.property_2},p3:{self.property_3}\}")
+  instance = YourClassName(instance = YourClassName(property_1='first',property_2='second')
+  print(instance) # -> {p1:'first',p2:'second',p3:False}
+)
+    ```
+#### Method definition
+
+Methods can be private to the Class, meaning that only instances of that class can use them.
+An example can be the method `__str__`, that only instances of a class have access.
+Methods can also be public, meaning that anyone can call that method. An example of a public method
+is the `__init__` method, anyone can use the constructor of a specific class to create an instance of it.
+
+Also, methods can be created to attend your needs, see the following example:
+
+```py
+import math
+class Point:
+  __init__(self,x:Float,y:Float):
+      self.x = x
+      self.y = y
+  __str__(self):
+      print(f"({self.x},{self.y})")
+  module(self):
+      point_module = math.sqrt(self.x**2+self.y**2)
+      return point_module
+point = Point(x=2.0,y=2.0)
+print(point) # -> (2,2)
+print(point.module()) # -> 2
+```
+#### Private methods
+
+Private methods is visible only for the class, and cannot be accessed by instances or inherited classes.
+To create a private method you need to add `__` before the method name.
+
+>[!TIP]
+>example : 
+> ```py
+> # test.class.py
+> class Test:
+>   def __init(self):
+>     self.property_1 = self.__do_something_internally()  
+>   def __do_something_internally(self):
+>       # do something ...
+>
+> # main.py  
+> test = Test()
+> test.__do_something_internally() # raises an error
+> ``` 
