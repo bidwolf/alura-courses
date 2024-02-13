@@ -280,3 +280,27 @@ To create a private method you need to add `__` before the method name.
 > test = Test()
 > test.__do_something_internally() # raises an error
 > ``` 
+
+#### @property
+This is a decorator for manage a property in the class.
+you can easily add that expression in the code and your class will can handle the property accordingly your need.
+
+```py
+class NewClassWithDecoratorProperty:
+    a = 1
+    _b = False
+    c = ''
+    def __init__(self, a,c):
+      self.a=a
+      self._b=False
+      self.c = c
+    def __str__(self):
+      return (self.a,self._b,self.c)
+    @property
+    def b(self):
+      return "ok" if self._b is True else "not ok"
+test = NewClassWithDecoratorProperty(a=2,c="test")
+print(test) # -> 2 ok test
+```
+
+> That decorator is useful for situations where your code need to send a different information based in others parameters. Or you need to access a protected information in your class in your class instance

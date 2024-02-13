@@ -7,8 +7,8 @@ def challenge_5():
     """The challenge 5 code"""
     italianiza_restaurant = Restaurant(name="Italian Restaurant", category="Italian")
     print(italianiza_restaurant.active)
-    italianiza_restaurant.active = True
+    italianiza_restaurant.activate()
     print(italianiza_restaurant.active)
     pizza_restaurant = Restaurant(name="Pizza Place", category="Fast Food")
-    print(f"the category of {pizza_restaurant.name} is {pizza_restaurant.category}")
-    pizza_restaurant.active = True
+    print(pizza_restaurant)
+    pizza_restaurant.activate()
