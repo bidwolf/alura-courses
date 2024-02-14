@@ -8,6 +8,7 @@ from src.challenges.challenge_3 import challenge_3
 from src.challenges.challenge_4 import challenge_4
 from src.challenges.challenge_5 import challenge_5
 from src.challenges.challenge_6 import challenge_6
+from src.challenges.challenge_7 import challenge_7
 from src.models.application import Application
 
 RESTAURANTS = []
@@ -256,8 +257,13 @@ def run_challenge(number: int):
             print("\nchallenge five: dictionaries\n")
             challenge_5()
         case 6:
-            print("\nchallenge five: dictionaries\n")
+            print("\nchallenge six: classes\n")
             challenge_6()
+
+        case 7:
+            print("\nchallenge seven: methods\n")
+            challenge_7()
+
         case _:
             print("NOT NOT\n")
 
@@ -268,11 +274,11 @@ app = Application()
 def main():
     """The main Function"""
     # clear_prompt() # version sequential
-    print("------------------ CHALLENGES ------------------\n")
-    for i in range(6, 7):
-        run_challenge(number=i)
     # show_version_menu() # version sequential
     app.run()
+    print("------------------ CHALLENGES ------------------\n")
+    for i in range(7, 8):
+        run_challenge(number=i)
     app.bump_version(bump_type="PATCH")
     print(app)
 
