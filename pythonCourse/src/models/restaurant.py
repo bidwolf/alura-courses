@@ -20,7 +20,7 @@ class Restaurant:
             + f" | {self._category.ljust(20)} | "
             + f"{self.active.ljust(20)}"
             + " |"
-            + f" {self.score_average:.2f}".ljust(20)
+            + f" {self.score_average}".ljust(20)
             + " |"
         )
 
@@ -53,4 +53,4 @@ class Restaurant:
         if len(self._evaluations) == 0:
             return 0.0
         total = sum(evaluate.score for evaluate in self._evaluations)
-        return float(total / len(self._evaluations))
+        return round(total / len(self._evaluations), 1)
