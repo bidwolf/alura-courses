@@ -136,6 +136,12 @@ Some examples on this chapter may require to make a summation of a list of numbe
 Actually python has this already made, the function name is sum, and you can pass to it a list of numbers,
 making more easy doing that kind of stuff.
 
+>[!TIP]
+> The filter syntax in python currently is more comprehensible than others languages, see the example below:
+> ```py
+> films = [{"name":"teste1","year":2000},{"name":"teste2","year":2009},{"name":"teste1","year":2020}]
+> old_films = [film for film in films if film["year"]<=2010] # returns a list with test1 and test2 inside
+> ```
 ### Dicionaries
 
 Dicionaries are the a variable type that have properties that can be
