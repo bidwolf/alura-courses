@@ -137,6 +137,7 @@ Actually python has this already made, the function name is sum, and you can pas
 making more easy doing that kind of stuff.
 
 >[!TIP]
+> ### Filters
 > The filter syntax in python currently is more comprehensible than others languages, see the example below:
 > ```py
 > films = [{"name":"teste1","year":2000},{"name":"teste2","year":2009},{"name":"teste1","year":2020}]
