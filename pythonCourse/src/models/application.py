@@ -18,7 +18,8 @@ class Application:
             "2. List restaurant",
             "3. Activate restaurant",
             "4. Disable restaurant",
-            "5. Exit",
+            "5. Evaluate restaurant",
+            "6. Exit app",
         ]
 
     def __str__(self):
@@ -26,6 +27,35 @@ class Application:
             f"{self._name} was created by {self._author}"
             + f" and currently is in the version {self._version}"
         )
+
+    def __evaluate_restaurant(self, restaurant_name):
+        """Menu option for evaluate a restaurant"""
+        existent_restaurant = self.__find_restaurant_by_name(
+            restaurant_name=restaurant_name
+        )
+        if existent_restaurant is None:
+            print("Cannot find any restaurant with that name.")
+            self.__rerun_app()
+        elif existent_restaurant.active == "✅":
+            client_name = input(
+                "To continue your restaurant evaluation, please type your name:\n"
+            )
+            try:
+                score = int(
+                    input(f"Type your score for the {restaurant_name} (0 to 10):\n")
+                )
+                assert 0 <= score <= 10, "You must type a value between 0 and 10"
+            except AssertionError as exception:
+                if isinstance(exception, AssertionError):
+                    print(exception)
+                    return
+                print("You must type an integer number")
+                return
+            existent_restaurant.evaluate(client=client_name, score=score)
+            print("Thanks for help evaluate us!")
+            return
+        else:
+            print("This restaurant is not active.")
 
     def bump_version(self, bump_type: "PATCH" or "MINOR" or "MAJOR"):
         """This method bump the version of the app"""
@@ -56,8 +86,9 @@ class Application:
         )
         if existent_restaurant is None:
             self._restaurants.append(restaurant)
-            return "Restaurant registered"
-        return "Restaurant already exists"
+            print("Restaurant registered")
+            return
+        print("Restaurant already exists")
 
     def __activate_restaurant(self, restaurant_name: str):
         """
@@ -68,8 +99,9 @@ class Application:
         )
         if isinstance(current_restaurant, Restaurant):
             current_restaurant.activate()
-            return f"The restaurant {restaurant_name} is now active"
-        return f"Cannot find restaurant called {restaurant_name}"
+            print(f"The restaurant {restaurant_name} is now active")
+            return
+        print(f"Cannot find restaurant called {restaurant_name}")
 
     def __disable_restaurant(self, restaurant_name: str):
         """
@@ -85,6 +117,15 @@ class Application:
 
     def __list_restaurants(self):
         """List all restaurants registered in the app"""
+        print(
+            "| name".ljust(23)
+            + "| category".ljust(23)
+            + "| active ".ljust(23)
+            + " | score".ljust(23)
+            + "|\n"
+        )
+        self.__print_line(character="*", repeat=93)
+
         for restaurant in self._restaurants:
             print(restaurant)
         print("\n")
@@ -148,12 +189,20 @@ class Application:
                 self.__disable_restaurant(restaurant_name=restaurant_name)
                 self.__rerun_app()
             case 5:
+                restaurant_name = input(
+                    "type the restaurant name that you want to evaluate:\n"
+                )
+                self.__evaluate_restaurant(restaurant_name=restaurant_name)
+                self.__rerun_app()
+
+            case 6:
                 self.__exit_app()
             case _:
                 print("Invalid option!\n")
                 self.__rerun_app()
 
-    def __print_line(self, character: str, repeat: int):
+    @staticmethod
+    def __print_line(character: str, repeat: int):
         """Print the {str} in {repeat} times"""
         print(f"{character*repeat}\n")
 

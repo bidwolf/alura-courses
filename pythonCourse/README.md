@@ -106,6 +106,13 @@ try:
 except Exception as exception:
   # do something with the exception info
 ```
+>[!NOTE]
+> Another thing that you may want to use is the `assert` instruction, that allows you to assert a condition, and case the instruction returns False, the **assertion** will **raise** a error. Let's see a example:
+> 
+> ```python
+> number = int(input("type a number"))
+> assert 0<= number <=10,"The number must be in the interval between 0 and 10."
+> ```
 ### Lists
 
 To declare a list is pretty common. just declare the variable with a `[]`
@@ -129,6 +136,13 @@ Some examples on this chapter may require to make a summation of a list of numbe
 Actually python has this already made, the function name is sum, and you can pass to it a list of numbers,
 making more easy doing that kind of stuff.
 
+>[!TIP]
+> ### Filters
+> The filter syntax in python currently is more comprehensible than others languages, see the example below:
+> ```py
+> films = [{"name":"teste1","year":2000},{"name":"teste2","year":2009},{"name":"teste1","year":2020}]
+> old_films = [film for film in films if film["year"]<=2010] # returns a list with test1 and test2 inside
+> ```
 ### Dicionaries
 
 Dicionaries are the a variable type that have properties that can be
@@ -148,6 +162,7 @@ print(variable.get('key')) # -> 'another_value'
 > - update method allow us to update existent keys in our dictionary 
 > - get method allow us to get a value from a key in our dictionary
 > - You cannot update a value from dictionary by doing something like this `dictionary.key = value`
+
 
 ### Docstring
 
