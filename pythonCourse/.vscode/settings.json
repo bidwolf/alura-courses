@@ -1,7 +1,9 @@
 {
   "cSpell.words": [
+    "classmethod",
     "elif",
     "isinstance",
+    "staticmethod",
     "venv"
   ],
   "files.exclude": {

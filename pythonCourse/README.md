@@ -132,7 +132,7 @@ making more easy doing that kind of stuff.
 ### Dicionaries
 
 Dicionaries are the a variable type that have properties that can be
-accessed with `variable["property"]` or `variable.property` very much like objects, but with some differences
+accessed with `variable["property"]` or `variable.get('property')` very much like objects, but with some differences
 
 To declare a dictionary you can follow the example below:
 
@@ -194,7 +194,7 @@ print(instance.property_1) # -> 'new atribute'
 > You can see all atributes of a class using `dir(instance)` that return a dictionary 
 > including default ones (all classes have those, something like `__shared_property__`).
 >
-> You can also see all atributes uniques of a class using `vars(instance)` that return a dictionary only with attributes of that class.
+> You can also see all atributes uniques of a class using `vars(instance)` that return a dictionary only with attributes of the instance of that class.
 
 ### Constructors
 
@@ -215,8 +215,8 @@ print(instance.property_3) # -> False (default attribution )
 
 ```
 >[!NOTE]
-> The self means the scope of the class, where self is a reference to the current instance
-> You always must pass self in the first parameter
+> The self means the scope of the class, where self is a reference to the current instance.
+> You always must pass self in the first parameter in a instance method.
 
 ### Methods
 Methods are functions that a Class can use to provide to the instance the rules applied to them
@@ -235,14 +235,12 @@ In the `special methods section` we have contact with the following methods:
         print(f"\{p1:{self.property_1},p2:{self.property_2},p3:{self.property_3}\}")
   instance = YourClassName(instance = YourClassName(property_1='first',property_2='second')
   print(instance) # -> {p1:'first',p2:'second',p3:False}
-)
     ```
 #### Method definition
 
 Methods can be private to the Class, meaning that only instances of that class can use them.
 An example can be the method `__str__`, that only instances of a class have access.
-Methods can also be public, meaning that anyone can call that method. An example of a public method
-is the `__init__` method, anyone can use the constructor of a specific class to create an instance of it.
+Methods can also be public, meaning that anyone can call that method.
 
 Also, methods can be created to attend your needs, see the following example:
 
@@ -280,3 +278,71 @@ To create a private method you need to add `__` before the method name.
 > test = Test()
 > test.__do_something_internally() # raises an error
 > ``` 
+
+#### @property
+This is a decorator for manage a property in the class.
+you can easily add that expression in the code and your class will can handle the property accordingly your need.
+
+```py
+class NewClassWithDecoratorProperty:
+    a = 1
+    _b = False
+    c = ''
+    def __init__(self, a,c):
+      self.a=a
+      self._b=False
+      self.c = c
+    def __str__(self):
+      return (self.a,self._b,self.c)
+    @property
+    def b(self):
+      return "ok" if self._b is True else "not ok"
+test = NewClassWithDecoratorProperty(a=2,c="test")
+print(test) # -> 2 ok test
+```
+
+>[!TIP]
+> That decorator is useful for situations where your code need to send a different information based in others parameters. Or you need to access a protected information in your class in your class instance
+
+#### @classmethod and @staticmethod
+
+Both are **decorators** in python, but each one has a unique reason to exist.
+
+- The **@classmethod** is responsible to provide to the method created with him access only for the class itself or the object that represents the class.
+Which means that a method created with that decorator cannot change atributes from the instance of that class. But it can change atributes from the class.
+
+- The **@staticmethod** cannot access any information about the class were it was defined, by doing this, static methods decorator turn the method just a namespace in that class.
+
+Example:
+```py
+class Test:
+  property_1='Class property'
+  def __init__(self,instance_property):
+    self.instance_property = instance_property
+  @classmethod
+  def class_method(cls): # cls is the object that represents the class
+    print(cls.property_1) # -> 'Class property'
+    # print(self.instance_property) -> raises an error
+    # because that method cannot have access to the instance property. 
+    cls.property_1='abc'
+  
+  @staticmethod
+  def static_method(prop_1): # cannot access any information about the class
+    # can be accessed outside a class instance
+    print(prop_1) # the property passed to that static method
+    # print(self) -> raises a error, self not exists in that scope
+    # print(property_1) -> raises a error, this variable not exists in that scope
+test = Test(instance_property='instance')
+# -> prints 'test outside' in the console
+Test.static_method('test outside') # (not a class instance)
+# -> prints 'test.property_1' in the console
+Test.class_method() # (not a class instance)
+test.static_method('test inside') # -> prints 'test inside' in the console
+test.class_method() # -> prints the test.property_1 value
+``` 
+
+>[!TIP]
+>we have a section about decorators [here](#decorators).
+### Decorators
+<!-- TODO : Provide a understandable documentation about decorators in Python -->
+

@@ -7,22 +7,32 @@ class Restaurant:
     """Restaurant model"""
 
     def __init__(self, name: str, category: str):
-        self.name = name
-        self.category = category
-        self.active = False
+        self._name = name
+        self._category = category
+        self._active = False
 
     def __str__(self):
         return (
-            f"| {self.name.ljust(20)}"
-            + f" | {self.category.ljust(20)} | "
-            + ("Active".ljust(20) if self.active is True else "Disabled".ljust(20))
+            f"| {self._name.ljust(20)}"
+            + f" | {self._category.ljust(20)} | "
+            + f"{self.active.ljust(20)}"
             + " |\t"
         )
 
+    @property
+    def name(self):
+        """Manage the returned value for the name property"""
+        return self._name.capitalize()
+
+    @property
+    def active(self):
+        """Manage the returned value for the active property"""
+        return "✅" if self._active is True else "❎"
+
     def activate(self):
         """This method activates the restaurant"""
-        self.active = True
+        self._active = True
 
     def disable(self):
         """This method disable the restaurant"""
-        self.active = False
+        self._active = False
