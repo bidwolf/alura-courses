@@ -14,8 +14,9 @@ def main():
     app.run()
     app.bump_version(bump_type="PATCH")
     print(app)
-    run_challenges()
     app_sequential_version.main()
+    run_challenges()
+
     bred = Food(description="sugar bred", name="Bred", price=20.00)
     lemonade = Drink(name="Bred", price=20.00, size="large")
     print(bred)
