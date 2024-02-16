@@ -11,7 +11,7 @@ class Vehicle:
 
     def __str__(self):
         return (
-            f"This {self._model} was manufactured by {self._fabricant } and it is turned"
+            f"This {self._model} was manufactured by {self._fabricant } and it is turned "
             + ("on." if self._started else "off.")
         )
 
@@ -24,7 +24,7 @@ class Car(Vehicle):
         super().__init__(model=model, fabricant=fabricant)
 
     def __str__(self):
-        return super().__str__() + f" and has {self._doors} doors."
+        return super().__str__() + f"Also has {self._doors} doors."
 
 
 class Bike(Vehicle):
@@ -35,9 +35,7 @@ class Bike(Vehicle):
         super().__init__(model=model, fabricant=fabricant)
 
     def __str__(self):
-        return (
-            super().__str__() + f" and has {self._cylinder_capacity} cylinder_capacity."
-        )
+        return super().__str__() + f"Also has {self._cylinder_capacity} cylinders."
 
 
 def challenge_9():

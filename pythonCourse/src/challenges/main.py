@@ -6,6 +6,7 @@ from src.challenges.challenge_5 import challenge_5
 from src.challenges.challenge_6 import challenge_6
 from src.challenges.challenge_7 import challenge_7
 from src.challenges.challenge_8 import challenge_8
+from src.challenges.challenge_9 import challenge_9
 
 
 def run_challenge(number: int):
@@ -28,7 +29,8 @@ def run_challenge(number: int):
             challenge_7()
         case 8:
             challenge_8()
-
+        case 9:
+            challenge_9()
         case _:
             print("NOT NOT\n")
 
@@ -42,6 +44,7 @@ challenges = [
     "\nchallenge six: classes\n",
     "\nchallenge seven: methods\n",
     "\nchallenge eight: imports and composition\n",
+    "\nchallenge nine: classes and inheritance\n",
 ]
 
 
