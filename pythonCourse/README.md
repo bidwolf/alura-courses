@@ -358,6 +358,19 @@ test.class_method() # -> prints the test.property_1 value
 
 >[!TIP]
 >we have a section about decorators [here](#decorators).
+
+### Inherit
+
+Inherit is a concept in `oop`, that means that a class is one of another inherited class. meaning that it own attributes and properties from that class.
+To make a class inherited from another you need to use the syntax below:
+
+```python
+from models.inherited_class import Inherited
+class Inherit(Inherited):
+  # rest of code...
+```
+#### super
+The instruction `super` uses the inherited reference, and can be used for many purposes. One of them is to construct the instance using the inherited constructor, allowing to that class focus in his own methods and attributes, and let the inherited class take care about the methods and attributes shared between them.  
 ### Decorators
 <!-- TODO : Provide a understandable documentation about decorators in Python -->
 
