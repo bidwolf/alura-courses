@@ -12,3 +12,11 @@ class Drink(RestaurantMenu):
 
     def __str__(self):
         return f"{self._name},{self._price},{self._size}"
+
+    def give_discount(self):
+        self._price -= self._price
+
+    @property
+    def size(self):
+        """the size of the drink"""
+        return self._size

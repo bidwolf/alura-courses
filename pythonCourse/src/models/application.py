@@ -2,6 +2,9 @@
 
 import os
 from src.models.restaurant import Restaurant
+from src.models.menu.drink import Drink
+from src.models.menu.dessert import Dessert
+from src.models.menu.food import Food
 from src.challenges.between_break_lines import between_break_lines
 
 
@@ -19,7 +22,11 @@ class Application:
             "3. Activate restaurant",
             "4. Disable restaurant",
             "5. Evaluate restaurant",
-            "6. Exit app",
+            "6. Create a drink",
+            "7. Create a food",
+            "8. Create a dessert",
+            "9. Show restaurant menu",
+            "10. Exit app",
         ]
 
     def __str__(self):
@@ -56,7 +63,7 @@ class Application:
         else:
             print("This restaurant is not active.")
 
-    def bump_version(self, bump_type: "PATCH" or "MINOR" or "MAJOR"):
+    def bump_version(self, bump_type: str):
         """This method bump the version of the app"""
         [major, minor, patch] = self._version.split(".")
         if bump_type == "PATCH":
@@ -69,7 +76,7 @@ class Application:
             print("invalid BUMP TYPE")
         self._version = f"{major}.{minor}.{patch}"
 
-    def __find_restaurant_by_name(self, restaurant_name: str) -> Restaurant or None:
+    def __find_restaurant_by_name(self, restaurant_name: str) -> Restaurant | None:
         """This method find a restaurant if in the base and returns it.
         Else returns None
         """
@@ -101,6 +108,90 @@ class Application:
             print(f"The restaurant {restaurant_name} is now active")
             return
         print(f"Cannot find restaurant called {restaurant_name}")
+
+    def __add_drink_item_menu(self, restaurant_name):
+        """create a drink item for the current restaurant menu"""
+        current_restaurant = self.__find_restaurant_by_name(
+            restaurant_name=restaurant_name
+        )
+        if isinstance(current_restaurant, Restaurant):
+            drink_name = input("insert the drink name:\n")
+            try:
+                drink_price = float(input("insert the price:\n"))
+                drink_size = int(input("insert the size (mL)\n"))
+            except ValueError as exception:
+                if isinstance(exception, ValueError):
+                    print(
+                        "wrong type was inserted, please for this input you should use numbers."
+                    )
+                    return
+                print("An error occurs")
+                return
+            new_drink = Drink(name=drink_name, size=drink_size, price=drink_price)
+            current_restaurant.create_option_menu(new_drink)
+            return
+        print("Cannot find a restaurant with that name.")
+
+    def __add_dessert_item_menu(self, restaurant_name):
+        """create a dessert item for the current restaurant menu"""
+        current_restaurant = self.__find_restaurant_by_name(
+            restaurant_name=restaurant_name
+        )
+        if isinstance(current_restaurant, Restaurant):
+            dessert_name = input("insert the dessert name:\n")
+            try:
+                dessert_price = float(input("insert the price:\n"))
+                dessert_weight = int(input("insert the weight (g)\n"))
+            except ValueError as exception:
+                if isinstance(exception, ValueError):
+                    print(
+                        "wrong type was inserted, please for this input you should use numbers."
+                    )
+                    return
+                print("An error occurs")
+                return
+            new_dessert = Dessert(
+                name=dessert_name, weight=dessert_weight, price=dessert_price
+            )
+            current_restaurant.create_option_menu(new_dessert)
+            return
+        print("Cannot find a restaurant with that name.")
+
+    def __add_food_item_menu(self, restaurant_name):
+        """create a food item for the current restaurant menu"""
+        current_restaurant = self.__find_restaurant_by_name(
+            restaurant_name=restaurant_name
+        )
+        if isinstance(current_restaurant, Restaurant):
+            food_name = input("insert the food name:\n")
+            try:
+                food_price = float(input("insert the price:\n"))
+                food_description = input("insert the description:\n")
+            except ValueError as exception:
+                if isinstance(exception, ValueError):
+                    print(
+                        "wrong type was inserted, please for this input you should use numbers."
+                    )
+                    return
+                print("An error occurs")
+                return
+            new_food = Food(
+                name=food_name, description=food_description, price=food_price
+            )
+            current_restaurant.create_option_menu(new_food)
+            return
+        print("Cannot find a restaurant with that name.")
+
+    def __show_restaurant_menu(self, restaurant_name: str):
+        """This method shows the restaurant menu"""
+        current_restaurant = self.__find_restaurant_by_name(
+            restaurant_name=restaurant_name
+        )
+        if isinstance(current_restaurant, Restaurant):
+            current_restaurant.show_menu()
+            self.__rerun_app()
+            return
+        print("Cannot find a restaurant with that name.")
 
     def __disable_restaurant(self, restaurant_name: str):
         """
@@ -193,8 +284,31 @@ class Application:
                 )
                 self.__evaluate_restaurant(restaurant_name=restaurant_name)
                 self.__rerun_app()
-
             case 6:
+                restaurant_name = input(
+                    "type the restaurant name that you want to add the drink:\n"
+                )
+                self.__add_drink_item_menu(restaurant_name=restaurant_name)
+                self.__rerun_app()
+            case 7:
+                restaurant_name = input(
+                    "type the restaurant name that you want to add the food:\n"
+                )
+                self.__add_food_item_menu(restaurant_name=restaurant_name)
+                self.__rerun_app()
+            case 8:
+                restaurant_name = input(
+                    "type the restaurant name that you want to add the dessert:\n"
+                )
+                self.__add_dessert_item_menu(restaurant_name=restaurant_name)
+                self.__rerun_app()
+            case 9:
+                restaurant_name = input(
+                    "type the restaurant name that you want to show the menu:\n"
+                )
+                self.__show_restaurant_menu(restaurant_name=restaurant_name)
+                self.__rerun_app()
+            case 10:
                 self.__exit_app()
             case _:
                 print("Invalid option!\n")

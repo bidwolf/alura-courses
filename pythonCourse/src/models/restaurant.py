@@ -3,6 +3,10 @@ This model is responsible for the business logic of each restaurant
 """
 
 from src.models.evaluation import Evaluation
+from src.models.menu.restaurant_menu import RestaurantMenu
+from src.models.menu.drink import Drink
+from src.models.menu.dessert import Dessert
+from src.models.menu.food import Food
 
 
 class Restaurant:
@@ -13,6 +17,7 @@ class Restaurant:
         self._category = category
         self._active = False
         self._evaluations = []
+        self._restaurant_menu = []
 
     def __str__(self):
         return (
@@ -54,3 +59,29 @@ class Restaurant:
             return "-"
         total = sum(evaluate.score for evaluate in self._evaluations)
         return round(total / len(self._evaluations), 1)
+
+    def show_menu(self):
+        """print a menu of drinks"""
+        print(f"{self._name} Menu:")
+        for index, item in enumerate(self._restaurant_menu, start=1):
+            if isinstance(item, Drink):
+                print(f"{index} - {item.name} ({item.size} mL) R$ {item.price}")
+            if isinstance(item, Food):
+                print(f"{index} - {item.name} R$ {item.price}\n")
+                print(f"Description: {item.description}")
+            if isinstance(item, Dessert):
+                print(f"{index} - {item.name} ({item.weight} g) R$ {item.price}")
+
+    def create_option_menu(self, item_menu: RestaurantMenu):
+        """create a menu option and append to the menu"""
+        if not isinstance(item_menu, RestaurantMenu):
+            print("We can't add this item to the menu.")
+            return
+        self._restaurant_menu.append(item_menu)
+        if isinstance(item_menu, Food):
+            print("The food was added to the menu.")
+            return
+        if isinstance(item_menu, Drink):
+            print("The drink was added to the menu.")
+        if isinstance(item_menu, Dessert):
+            print("The dessert was added to the menu.")
