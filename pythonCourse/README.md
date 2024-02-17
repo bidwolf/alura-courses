@@ -379,6 +379,12 @@ class Car(Vehicle):
       self._doors = doors
       super().__init__(wheels,color)
 ```
+
+#### Abstract methods
+
+Abstract methods is for classes that inherits another class, when a abstract method is created in the inherited class, this method should be in the child class.
+
+To use it on python you must import from `abc`, the `ABC` class that allows you to use the `abstractmethod` decorator before the method.
 ### Decorators
 <!-- TODO : Provide a understandable documentation about decorators in Python -->
 
