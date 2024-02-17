@@ -3,6 +3,7 @@
 import os
 from src.models.restaurant import Restaurant
 from src.models.menu.drink import Drink
+from src.models.menu.dessert import Dessert
 from src.models.menu.food import Food
 from src.challenges.between_break_lines import between_break_lines
 
@@ -23,8 +24,9 @@ class Application:
             "5. Evaluate restaurant",
             "6. Create a drink",
             "7. Create a food",
-            "8. Show restaurant menu",
-            "9. Exit app",
+            "8. Create a dessert",
+            "9. Show restaurant menu",
+            "10. Exit app",
         ]
 
     def __str__(self):
@@ -127,6 +129,31 @@ class Application:
                 return
             new_drink = Drink(name=drink_name, size=drink_size, price=drink_price)
             current_restaurant.create_option_menu(new_drink)
+            return
+        print("Cannot find a restaurant with that name.")
+
+    def __add_dessert_item_menu(self, restaurant_name):
+        """create a dessert item for the current restaurant menu"""
+        current_restaurant = self.__find_restaurant_by_name(
+            restaurant_name=restaurant_name
+        )
+        if isinstance(current_restaurant, Restaurant):
+            dessert_name = input("insert the dessert name:\n")
+            try:
+                dessert_price = float(input("insert the price:\n"))
+                dessert_weight = int(input("insert the weight (g)\n"))
+            except ValueError as exception:
+                if isinstance(exception, ValueError):
+                    print(
+                        "wrong type was inserted, please for this input you should use numbers."
+                    )
+                    return
+                print("An error occurs")
+                return
+            new_dessert = Dessert(
+                name=dessert_name, weight=dessert_weight, price=dessert_price
+            )
+            current_restaurant.create_option_menu(new_dessert)
             return
         print("Cannot find a restaurant with that name.")
 
@@ -271,11 +298,17 @@ class Application:
                 self.__rerun_app()
             case 8:
                 restaurant_name = input(
+                    "type the restaurant name that you want to add the dessert:\n"
+                )
+                self.__add_dessert_item_menu(restaurant_name=restaurant_name)
+                self.__rerun_app()
+            case 9:
+                restaurant_name = input(
                     "type the restaurant name that you want to show the menu:\n"
                 )
                 self.__show_restaurant_menu(restaurant_name=restaurant_name)
                 self.__rerun_app()
-            case 9:
+            case 10:
                 self.__exit_app()
             case _:
                 print("Invalid option!\n")
