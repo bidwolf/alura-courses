@@ -13,8 +13,18 @@ To configure your project you can need to follow these steps:
 
 2. (OPTIONAL) if you use vscode you can press `COMMAND + SHIFT + P` then type `select interpreter` select that option and select the interpreter on `.venv` directory 
 to allow the terminal to use the python created in your virtual environment.
+Or just run this command line on terminal :
+  ```shell
+  source nome_do_ambiente/bin/activate
+  ```
 
 3. read the `/requirements.txt` to install the requirements.
+
+>[!TIP]
+> The requirements.txt can be updated by using the following command:
+>  ```shell
+>  source nome_do_ambiente/bin/activate
+>  ```
 
 ## Chapters
 
