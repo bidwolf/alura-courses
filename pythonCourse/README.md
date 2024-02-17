@@ -23,7 +23,7 @@ Or just run this command line on terminal :
 >[!TIP]
 > The requirements.txt can be updated by using the following command:
 >  ```shell
->  source nome_do_ambiente/bin/activate
+>  pip3 freeze > requirements.txt
 >  ```
 
 ## Chapters
