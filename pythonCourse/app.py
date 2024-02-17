@@ -10,17 +10,12 @@ app = Application()
 
 
 def main():
-    """The main Function"""
+    # """The main Function"""
     app.run()
     app.bump_version(bump_type="PATCH")
     print(app)
-    app_sequential_version.main()
-    run_challenges()
-
-    bred = Food(description="sugar bred", name="Bred", price=20.00)
-    lemonade = Drink(name="Bred", price=20.00, size="large")
-    print(bred)
-    print(lemonade)
+    # app_sequential_version.main()
+    # run_challenges()
 
 
 if __name__ == "__main__":

@@ -370,7 +370,15 @@ class Inherit(Inherited):
   # rest of code...
 ```
 #### super
-The instruction `super` uses the inherited reference, and can be used for many purposes. One of them is to construct the instance using the inherited constructor, allowing to that class focus in his own methods and attributes, and let the inherited class take care about the methods and attributes shared between them.  
+The instruction `super` uses the inherited reference, and can be used for many purposes. One of them is to construct the instance using the inherited constructor, allowing to that class focus in his own methods and attributes, and let the inherited class take care about the methods and attributes shared between them.
+
+```py
+from path.to.your.vehicle import Vehicle
+class Car(Vehicle):
+  def __init__(self,wheels,color,doors):
+      self._doors = doors
+      super().__init__(wheels,color)
+```
 ### Decorators
 <!-- TODO : Provide a understandable documentation about decorators in Python -->
 
