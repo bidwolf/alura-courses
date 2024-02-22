@@ -4,13 +4,13 @@
 class Champion:
     """This class represents a champion in league of legends"""
 
-    def __init__(self, name: str, category: str):
+    def __init__(self, name: str, lane: str):
         self._name = name
-        self._category = category
+        self._lane = lane
         self._level = 1
 
     def __str__(self):
-        return f"The champion {self._name} is a {self._category}"
+        return f"The champion {self._name} is a {self._lane}"
 
     @property
     def name(self):
@@ -18,6 +18,6 @@ class Champion:
         return self._name
 
     @property
-    def category(self):
-        """The champion category"""
-        return self._category
+    def lane(self):
+        """The champion lane"""
+        return self._lane

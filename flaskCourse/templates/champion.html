@@ -10,15 +10,27 @@
 <body>
   <header>
     <h1>
-      My favorite champions on League of Legends
+      My favorite champions on {{game_name}}
     </h1>
   </header>
   <main>
-    <ul>
-      <li>Nunu and Willump</li>
-      <li>Jhin</li>
-      <li>Alistar</li>
-    </ul>
+    <table>
+      <thead>
+        <tr>
+          <th>Champion name</th>
+          <th>Lane</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for champion in champions %}
+        <tr>
+          <td>{{champion.name}}</td>
+          <td>{{champion.lane}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
   </main>
 </body>
 
