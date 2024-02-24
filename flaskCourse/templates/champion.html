@@ -1,37 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>League of legends champions</title>
-</head>
-
-<body>
-  <header>
-    <h1>
-      My favorite champions on {{game_name}}
-    </h1>
-  </header>
-  <main>
-    <table>
-      <thead>
-        <tr>
-          <th>Champion name</th>
-          <th>Lane</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for champion in champions %}
-        <tr>
-          <td>{{champion.name}}</td>
-          <td>{{champion.lane}}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-
-  </main>
-</body>
-
-</html>
+{% extends "base.html" %}
+{% block content %}
+<header class="p-2">
+  <h1 class="font-medium text-2xl">
+    My favorite champions on {{game_name}}
+  </h1>
+</header>
+<main class="flex flex-col gap-4">
+  <table>
+    <thead>
+      <tr class=" p-2 text-lg bg-emerald-800 mix-blend-plus-lighter">
+        <th class="p-2 w-80 border-2 border-zinc-300">Champion name</th>
+        <th class="w-80 p-2 border-2 border-zinc-300">Lane</th>
+      </tr>
+    </thead>
+    <tbody class="border-2 border-zinc-700">
+      {% for champion in champions %}
+      <tr>
+        <td class="p-2 border-r-2 border-r-zinc-700">{{champion.name}}</td>
+        <td class="p-2">{{champion.lane}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="/create-champion" class="bg-emerald-800 mix-blend-plus-lighter px-4 py-2 w-48 self-end">
+    Add a champion
+  </a>
+</main>
+{% endblock %}

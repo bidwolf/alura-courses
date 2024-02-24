@@ -12,5 +12,14 @@
     "viego",
     "Werkzeug",
     "Willump"
-  ]
+  ],
+  // configuring tailwind autocomplete on cdn
+  "tailwindCSS.includeLanguages": { 
+    "html": "html",
+    "javascript": "javascript",
+    "css": "css"
+},
+"editor.quickSuggestions": {
+    "strings": true
+}
 }
