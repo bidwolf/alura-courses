@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="post" action="/authenticate">
+  <fieldset id="session" class="flex flex-col items-center justify-center gap-2 p-2">
+    <legend>
+      Add your favorite champion
+    </legend>
+    <input name="user_email" type="text" placeholder="User name or E-mail" class="text-zinc-800" />
+    <input name="password" type="password" placeholder="Type your password" class="text-zinc-800" />
+    <button type="submit" class="bg-emerald-700 mix-blend-plus-lighter px-8 py-2">Login</button>
+  </fieldset>
+</form>
+{% endblock %}

@@ -1,11 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
-<header class="p-2">
+<header class="p-2 flex w-full justify-end gap-2">
+  <nav class=" flex gap-2">
+    {% if user_email %}
+    <span class="text-emerald-700">
+      Usuário :&nbsp;
+      <a href="/">{{user_email}}</a>
+    </span>
+    <a href="/logout">Logout</a>
+    {%else%}
+    <a href="/login">
+      Login
+    </a>
+    {%endif%}
+  </nav>
+</header>
+<main class="flex flex-col gap-4">
   <h1 class="font-medium text-2xl">
     My favorite champions on {{game_name}}
   </h1>
-</header>
-<main class="flex flex-col gap-4">
   <table>
     <thead>
       <tr class=" p-2 text-lg bg-emerald-800 mix-blend-plus-lighter">
