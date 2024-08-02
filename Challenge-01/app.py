@@ -99,3 +99,12 @@ def show_only_favorites():
         isFavorite = "✔️" if contact["isFavorite"] else "x"
         if isFavorite == "✔️":
             print(f"{index}\t{name}\t{mail}\t{phoneNumber}\t{isFavorite}")
+
+
+def toggle_favorite_contact():
+    """
+    Função responsável por marcar/desmarcar um contato como favorito na lista de contatos
+    """
+    print("Operação concluída com sucesso")
+    contact = find_contact()
+    contact["isFavorite"] = not contact["isFavorite"]
