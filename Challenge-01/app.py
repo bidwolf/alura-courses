@@ -47,3 +47,28 @@ def find_contact():
     raise ContactException(
         message="Nenhum contato com esse nome encontrado", error="NOTFOUND"
     )
+
+
+def change_contact():
+    """
+    Função responsável por alterar os dados de um contato
+    """
+    contact = find_contact()
+    print(
+        """
+Caso não deseje alterar o campo basta apenas apertar a tecla
+<Enter> sem preencher o campo em questão\n"""
+    )
+    new_name = str(input("Nome do contato:(Pressione <ENTER> para pular)\n"))
+    new_phoneNumber = str(input("Telefone:(Pressione <ENTER> para pular)\n"))
+    new_mail = str(input("Email do contato:(Pressione <ENTER> para pular)\n"))
+    if not new_name and not new_mail and not new_phoneNumber:
+        print("Nenhuma alteração foi feita")
+        return
+    contact["name"] = new_name if new_name else contact["name"]
+    contact["phoneNumber"] = (
+        new_phoneNumber if new_phoneNumber else contact["phoneNumber"]
+    )
+    contact["mail"] = new_mail if new_mail else contact["mail"]
+    print("Contato alterado com sucesso")
+    return
