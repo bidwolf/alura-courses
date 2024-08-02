@@ -108,3 +108,15 @@ def toggle_favorite_contact():
     print("Operação concluída com sucesso")
     contact = find_contact()
     contact["isFavorite"] = not contact["isFavorite"]
+
+
+def delete_contact():
+    """
+    Função responsável por deletar um contato existente
+    """
+    name = input("Digite o nome do contato que deseja excluir:\n")
+    for index, contact in enumerate(contacts):
+        if contact["name"] == name:
+            deleted_contact = contacts.pop(index)
+            print(f"O contato {name} foi excluido com sucesso\n", deleted_contact)
+            return
