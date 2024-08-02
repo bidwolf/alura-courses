@@ -120,3 +120,50 @@ def delete_contact():
             deleted_contact = contacts.pop(index)
             print(f"O contato {name} foi excluido com sucesso\n", deleted_contact)
             return
+
+
+def main():
+    """
+    Função principal do app
+    """
+    print("BEM VINDO AO ROCKET CONTACTS")
+    print("O QUE DESEJA FAZER?\n")
+    selected_option = 30
+    while selected_option != 0:
+        print("1 - ADICIONAR CONTATO")
+        print("2 - ALTERAR CONTATO EXISTENTE")
+        print("3 - LISTAR TODOS OS CONTATOS")
+        print("4 - LISTAR FAVORITOS")
+        print("5 - MARCAR/DESMARCAR CONTATO COMO FAVORITO")
+        print("6 - REMOVER CONTATO")
+        print("0 - SAIR")
+        try:
+            selected_option = int(input())
+            if selected_option not in range(0, 6):
+                print("Opção inválida")
+                continue
+            print(f"Você selecionou a opção {selected_option}")
+            match selected_option:
+                case 1:
+                    create_contact()
+                case 2:
+                    change_contact()
+                case 3:
+                    show_all_contacts()
+                case 4:
+                    show_only_favorites()
+                case 5:
+                    toggle_favorite_contact()
+                case 6:
+                    delete_contact()
+        except ValueError as error:
+            print("O valor informado é inválido", error)
+        except ContactException as error:
+            print(error, error.error)
+        except Exception as error:
+            print("Ocorreu um erro durante a execução do programa", error)
+
+
+# INICIO DA APLICAÇÃO
+
+main()
