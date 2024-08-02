@@ -33,3 +33,17 @@ def create_contact():
 
 
 contacts = []  # A lista de contatos existentes
+
+
+def find_contact():
+    """
+    Função responsável por achar um contato existente
+    """
+    name = str(input("Digite o nome do contato\n"))
+    for contact in contacts:
+        contact_name = contact["name"]
+        if name is contact_name or name == contact_name:
+            return contact
+    raise ContactException(
+        message="Nenhum contato com esse nome encontrado", error="NOTFOUND"
+    )
