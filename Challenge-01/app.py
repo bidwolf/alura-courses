@@ -5,11 +5,11 @@ Acesse o link para mais informações: https://efficient-sloth-d85.notion.site/D
 """
 
 
-def main():
+class ContactException(Exception):
     """
-    Funcao principal do app
+    Exceções para contatos
     """
-    print("BEM VINDO AO ROCKET CONTACTS")
 
-
-main()
+    def __init__(self, message, error):
+        super().__init__(message)
+        self.error = error
