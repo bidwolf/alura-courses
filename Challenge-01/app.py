@@ -13,3 +13,23 @@ class ContactException(Exception):
     def __init__(self, message, error):
         super().__init__(message)
         self.error = error
+
+
+def create_contact():
+    """
+    Função responsável por criar um contato na lista de contatos
+    """
+    name = str(print("Nome do contato:\n"))
+    phoneNumber = str(print("Telefone:\n"))
+    mail = str(print("Nome do contato:\n"))
+    print("Contato criado com sucesso")
+    new_contact = {
+        "name": name,
+        "phoneNumber": phoneNumber,
+        "mail": mail,
+        "isFavorite": False,
+    }
+    contacts.append(new_contact)
+
+
+contacts = []  # A lista de contatos existentes
