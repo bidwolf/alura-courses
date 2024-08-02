@@ -85,3 +85,17 @@ def show_all_contacts():
         phoneNumber = contact["phoneNumber"]
         isFavorite = "✔️" if contact["isFavorite"] else "x"
         print(f"{index}\t{name}\t{mail}\t{phoneNumber}\t{isFavorite}")
+
+
+def show_only_favorites():
+    """
+    Função responsável por listar todos os contatos favoritos
+    """
+    print("CODE\tNAME\tPHONE\tFAVORITE ")
+    for index, contact in enumerate(contacts):
+        name = contact["name"]
+        mail = contact["mail"]
+        phoneNumber = contact["phoneNumber"]
+        isFavorite = "✔️" if contact["isFavorite"] else "x"
+        if isFavorite == "✔️":
+            print(f"{index}\t{name}\t{mail}\t{phoneNumber}\t{isFavorite}")
