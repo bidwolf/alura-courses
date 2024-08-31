@@ -32,12 +32,17 @@
       {% if champion%}
       <tr>
         <td class="p-2 border-r-2 border-r-zinc-700">{{champion.champion_name}}</td>
-        <td class="p-2">{{champion.lane}}</td>
-        <td class="p-2">
+        <td class="p-2 border-r-2 border-r-zinc-700">{{champion.lane}}</td>
+        <td class="p-2 flex gap-2">
           <a href="{{url_for('update_champion', champion_id=champion.id)}}"
             class="bg-emerald-800 mix-blend-plus-lighter px-4 py-2 opacity-90 hover:opacity-80 active:opacity-100">
             Update
           </a>
+          <a href="{{url_for('delete_champion', champion_id=champion.id)}}"
+            class="bg-red-800 mix-blend-plus-lighter px-4 py-2 opacity-90 hover:opacity-80 active:opacity-100">
+            Delete
+          </a>
+
       </tr>
       {% else %}
       <p> You must add champions in your favorite lists!</p>
