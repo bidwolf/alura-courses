@@ -11,4 +11,4 @@ from views import *
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=os.getenv("DB_PORT"))
+    app.run(debug=True, port=os.getenv("APP_PORT"))
