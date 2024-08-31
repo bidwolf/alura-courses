@@ -17,7 +17,7 @@
 </header>
 <main class="flex flex-col gap-4">
   <h1 class="font-medium text-2xl">
-    My favorite champions on {{game_name}}
+    All registered champions in {{game_name}}
   </h1>
   <table>
     <thead>
@@ -28,10 +28,14 @@
     </thead>
     <tbody class="border-2 border-zinc-700">
       {% for champion in champions %}
+      {% if champion%}
       <tr>
-        <td class="p-2 border-r-2 border-r-zinc-700">{{champion.name}}</td>
+        <td class="p-2 border-r-2 border-r-zinc-700">{{champion.champion_name}}</td>
         <td class="p-2">{{champion.lane}}</td>
       </tr>
+      {% else %}
+      <p> You must add champions in your favorite lists!</p>
+      {% endif %}
       {% endfor %}
     </tbody>
   </table>
