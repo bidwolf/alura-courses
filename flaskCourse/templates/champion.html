@@ -24,6 +24,7 @@
       <tr class=" p-2 text-lg bg-emerald-800 mix-blend-plus-lighter">
         <th class="p-2 w-80 border-2 border-zinc-300">Champion name</th>
         <th class="w-80 p-2 border-2 border-zinc-300">Lane</th>
+        <th class="w-80 p-2 border-2 border-zinc-300">Actions</th>
       </tr>
     </thead>
     <tbody class="border-2 border-zinc-700">
@@ -32,6 +33,11 @@
       <tr>
         <td class="p-2 border-r-2 border-r-zinc-700">{{champion.champion_name}}</td>
         <td class="p-2">{{champion.lane}}</td>
+        <td class="p-2">
+          <a href="{{url_for('update_champion', champion_id=champion.id)}}"
+            class="bg-emerald-800 mix-blend-plus-lighter px-4 py-2 opacity-90 hover:opacity-80 active:opacity-100">
+            Update
+          </a>
       </tr>
       {% else %}
       <p> You must add champions in your favorite lists!</p>
@@ -39,7 +45,7 @@
       {% endfor %}
     </tbody>
   </table>
-  <a href="/create-champion" class="bg-emerald-800 mix-blend-plus-lighter px-4 py-2 w-48 self-end">
+  <a href="{{url_for('create_champion')}}" class="bg-emerald-800 mix-blend-plus-lighter px-4 py-2 w-48 self-end">
     Add a champion
   </a>
 </main>
