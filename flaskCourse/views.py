@@ -54,6 +54,21 @@ def update():
         flash("Something wrong, cannot update champion.\nPlease, try again later.")
 
 
+@app.route("/delete/<int:champion_id>")
+def delete_champion(champion_id):
+    """This is the route that allows the user to remove a favorite champion"""
+    if not is_authenticated():
+        return redirect("/login", code=422)
+    rows_changed = Champions.query.filter_by(id=champion_id).delete()
+    if rows_changed:
+        db.session.commit()
+        flash("Champion excluded with success")
+        return redirect("/", code=302)
+    else:
+        db.session.flush()
+        flash("Something wrong, cannot delete champion.\nPlease,try again later.")
+
+
 @app.route("/create", methods=["POST"])
 def create():
     """This is the endpoint to create a champion"""
