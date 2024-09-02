@@ -10,3 +10,4 @@ SQLALCHEMY_DATABASE_URI = "{SGBD}://{user}:{password}@{server}/{database}".forma
     server=os.getenv("DB_HOST"),
     database=os.getenv("DB_NAME"),
 )
+UPLOAD_PATH = os.path.dirname(os.path.abspath(__file__)) + "/uploads"
