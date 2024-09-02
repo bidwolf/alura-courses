@@ -1,3 +1,5 @@
+"""This module is responsible for create routes and views for the app"""
+
 import os
 import time
 from app import app, db
