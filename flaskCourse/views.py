@@ -1,7 +1,18 @@
+import os
+import time
 from app import app, db
 from models import Champions, Users
 from src.middlewares.authentication import is_authenticated
-from flask import render_template, request, redirect, session, flash
+from helpers import delete_file, recover_image
+from flask import (
+    render_template,
+    request,
+    redirect,
+    session,
+    flash,
+    url_for,
+    send_from_directory,
+)
 
 
 @app.route("/")
@@ -16,7 +27,7 @@ def champion():
             champions=champions,
             user_email=session.get("user_email"),
         )
-    return redirect("/login", 302)
+    return redirect(url_for("login"), code=302)
 
 
 @app.route("/create-champion")
@@ -29,16 +40,19 @@ def create_champion():
 def update_champion(champion_id):
     """This is the route that allows the user add a favorite champion"""
     if not is_authenticated():
-        return redirect("/login", code=422)
+        return redirect(url_for("login"), code=422)
     existent_champion = Champions.query.filter_by(id=champion_id).first()
-    return render_template("update_champion.html", champion=existent_champion)
+    splash_art = recover_image(cover_id=champion_id)
+    return render_template(
+        "update_champion.html", champion=existent_champion, splash_art=splash_art
+    )
 
 
 @app.route("/update", methods=["POST"])
 def update():
     """This is the endpoint to update a champion"""
     if not is_authenticated():
-        return redirect("/login", code=422)
+        return redirect(url_for("login"), code=422)
     lane = request.form["champion_lane"]
     name = request.form["champion_name"]
     champion_id = request.form["champion_id"]
@@ -46,6 +60,14 @@ def update():
         dict(lane=lane, champion_name=name)
     )
     if rows_changed:
+        uploaded_file = request.files["splash_art"]
+        if uploaded_file:
+            timestamp = time.time()
+            delete_file(champion_id)
+            upload_path = app.config["UPLOAD_PATH"]
+            uploaded_file.save(
+                f"{upload_path}/splash_art-{champion_id}-{timestamp}.jpg"
+            )
         db.session.commit()
         flash("Campeão atualizado com sucesso!")
         return redirect("/", code=302)
@@ -58,9 +80,10 @@ def update():
 def delete_champion(champion_id):
     """This is the route that allows the user to remove a favorite champion"""
     if not is_authenticated():
-        return redirect("/login", code=422)
+        return redirect(url_for("login"), code=422)
     rows_changed = Champions.query.filter_by(id=champion_id).delete()
     if rows_changed:
+        delete_file(cover_id=champion_id)
         db.session.commit()
         flash("Champion excluded with success")
         return redirect("/", code=302)
@@ -73,7 +96,7 @@ def delete_champion(champion_id):
 def create():
     """This is the endpoint to create a champion"""
     if not is_authenticated():
-        return redirect("/login", code=422)
+        return redirect(url_for("login"), code=422)
     lane = request.form["champion_lane"]
     name = request.form["champion_name"]
     champion_already_exists = (
@@ -85,6 +108,15 @@ def create():
     new_champion = Champions(champion_name=name, lane=lane)
     db.session.add(new_champion)
     db.session.commit()
+    uploaded_file = request.files["splash_art"]
+    upload_path = app.config["UPLOAD_PATH"]
+    if uploaded_file:
+        delete_file(new_champion.id)
+        timestamp = time.time()
+        uploaded_file.save(
+            f"{upload_path}/splash_art-{new_champion.id}-{timestamp}.jpg"
+        )
+
     return redirect("/", code=302)
 
 
@@ -106,7 +138,7 @@ def auth():
             flash("Authentication succeed with success")
             return redirect("/", code=302)
     flash("Authentication failed")
-    return redirect("/login", code=302)
+    return redirect(url_for("login"), code=302)
 
 
 @app.route("/logout")
@@ -115,3 +147,9 @@ def logout():
     session["user_email"] = None
     flash("User session ended.")
     return redirect("/login")
+
+
+@app.route("/uploads/<file_name>")
+def cover(file_name):
+    """Route created to serve the requested image"""
+    return send_from_directory(app.config["UPLOAD_PATH"], file_name)
