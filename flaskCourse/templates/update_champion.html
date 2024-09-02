@@ -1,15 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
-<form method="post" action="{{url_for('update')}}"">
+<form method="post" action="{{url_for('update')}}" enctype="multipart/form-data">
   <fieldset id=" add_favorite_champion" class="flex flex-col items-center justify-center gap-2 p-2">
-  <legend>
-    Add your favorite champion
-  </legend>
-  <input name="champion_id" type="hidden" value="{{champion.id}}" />
-  <input name="champion_name" type="text" placeholder="champion name" class="text-zinc-800"
-    value="{{champion.champion_name}}" />
-  <input name="champion_lane" type="text" placeholder="champion lane" class="text-zinc-800" value="{{champion.lane}}" />
-  <button type="submit" class="bg-emerald-700 mix-blend-plus-lighter px-8 py-2">Send</button>
+    <legend>
+      Update champion
+    </legend>
+    <input name="champion_id" type="hidden" value="{{champion.id}}" />
+    <input name="champion_name" type="text" placeholder="champion name" class="text-zinc-800 w-96"
+      value="{{champion.champion_name}}" />
+    <input name="champion_lane" type="text" placeholder="champion lane" class="text-zinc-800 w-96"
+      value="{{champion.lane}}" />
+    <figure>
+      <img id="splash_art_preview" class="w-96" src="{{url_for('cover',file_name=splash_art)}}"
+        alt="splash art preview" />
+      <figcaption>
+        <label for="splash_art" class="text-zinc-800">Splash Art</label>
+        <input type="file" name="splash_art" id="splash_art" class="w-96" accept=".jpg,.png" />
+      </figcaption>
+    </figure>
+    <button type="submit" class="bg-emerald-700 mix-blend-plus-lighter px-8 py-2">Send</button>
   </fieldset>
 </form>
 {% endblock %}

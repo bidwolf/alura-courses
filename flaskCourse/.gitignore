@@ -1,1 +1,4 @@
 # Gitignore file specific for the flask module
+
+uploads/*.jpg
+uploads/*.png 
