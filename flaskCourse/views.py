@@ -1,10 +1,6 @@
 """This module is responsible for create routes and views for the app"""
 
 import time
-from app import app, db
-from models import Champions, Users
-from src.middlewares.authentication import is_authenticated
-from helpers import delete_file, recover_image
 from flask import (
     render_template,
     request,
@@ -14,6 +10,10 @@ from flask import (
     url_for,
     send_from_directory,
 )
+from app import app, db
+from models import Champions, Users
+from src.middlewares.authentication import is_authenticated
+from helpers import delete_file, recover_image, FlaskChampionForm, FlaskLoginForm
 
 
 @app.route("/")
@@ -34,7 +34,8 @@ def champion():
 @app.route("/create-champion")
 def create_champion():
     """This is the route that allows the user add a favorite champion"""
-    return render_template("create_champion.html")
+    form = FlaskChampionForm()
+    return render_template("create_champion.html", form=form)
 
 
 @app.route("/update-champion/<int:champion_id>")
@@ -43,9 +44,15 @@ def update_champion(champion_id):
     if not is_authenticated():
         return redirect(url_for("login"), code=422)
     existent_champion = Champions.query.filter_by(id=champion_id).first()
+    form = FlaskChampionForm()
+    form.champion_name.data = existent_champion.champion_name
+    form.champion_lane.data = existent_champion.lane
     splash_art = recover_image(cover_id=champion_id)
     return render_template(
-        "update_champion.html", champion=existent_champion, splash_art=splash_art
+        "update_champion.html",
+        id=existent_champion.id,
+        splash_art=splash_art,
+        form=form,
     )
 
 
@@ -54,27 +61,30 @@ def update():
     """This is the endpoint to update a champion"""
     if not is_authenticated():
         return redirect(url_for("login"), code=422)
-    lane = request.form["champion_lane"]
-    name = request.form["champion_name"]
-    champion_id = request.form["champion_id"]
-    rows_changed = Champions.query.filter_by(id=champion_id).update(
-        dict(lane=lane, champion_name=name)
-    )
-    if rows_changed:
-        uploaded_file = request.files["splash_art"]
-        if uploaded_file:
-            timestamp = time.time()
-            delete_file(champion_id)
-            upload_path = app.config["UPLOAD_PATH"]
-            uploaded_file.save(
-                f"{upload_path}/splash_art-{champion_id}-{timestamp}.jpg"
-            )
-        db.session.commit()
-        flash("Campeão atualizado com sucesso!")
-        return redirect("/", code=302)
-    else:
+    form = FlaskChampionForm(request.form)
+    if form.validate_on_submit():
+        lane = request.form["champion_lane"]
+        name = request.form["champion_name"]
+        champion_id = request.form["champion_id"]
+        rows_changed = Champions.query.filter_by(id=champion_id).update(
+            {"lane": lane, "champion_name": name}
+        )
+        if rows_changed:
+            uploaded_file = request.files["splash_art"]
+            if uploaded_file:
+                timestamp = time.time()
+                delete_file(champion_id)
+                upload_path = app.config["UPLOAD_PATH"]
+                uploaded_file.save(
+                    f"{upload_path}/splash_art-{champion_id}-{timestamp}.jpg"
+                )
+            db.session.commit()
+            flash("Campeão atualizado com sucesso!")
+            return redirect(url_for("champion"), code=302)
         db.session.flush()
+        db.session.close()
         flash("Something wrong, cannot update champion.\nPlease, try again later.")
+    return redirect(url_for("champion"), code=302)
 
 
 @app.route("/delete/<int:champion_id>")
@@ -87,57 +97,61 @@ def delete_champion(champion_id):
         delete_file(cover_id=champion_id)
         db.session.commit()
         flash("Champion excluded with success")
-        return redirect("/", code=302)
     else:
         db.session.flush()
         flash("Something wrong, cannot delete champion.\nPlease,try again later.")
+    return redirect("/", code=302)
 
 
 @app.route("/create", methods=["POST"])
 def create():
     """This is the endpoint to create a champion"""
-    if not is_authenticated():
-        return redirect(url_for("login"), code=422)
-    lane = request.form["champion_lane"]
-    name = request.form["champion_name"]
-    champion_already_exists = (
-        Champions.query.filter_by(champion_name=name).filter_by(lane=lane).first()
-    )
-    if champion_already_exists:
-        flash("Champion already exists")
-        return redirect("/", code=302)
-    new_champion = Champions(champion_name=name, lane=lane)
-    db.session.add(new_champion)
-    db.session.commit()
-    uploaded_file = request.files["splash_art"]
-    upload_path = app.config["UPLOAD_PATH"]
-    if uploaded_file:
-        delete_file(new_champion.id)
-        timestamp = time.time()
-        uploaded_file.save(
-            f"{upload_path}/splash_art-{new_champion.id}-{timestamp}.jpg"
+    form = FlaskChampionForm(request.form)
+    if form.validate_on_submit():
+        if not is_authenticated():
+            return redirect(url_for("login"), code=422)
+        lane = request.form["champion_lane"]
+        name = request.form["champion_name"]
+        champion_already_exists = (
+            Champions.query.filter_by(champion_name=name).filter_by(lane=lane).first()
         )
-
+        if champion_already_exists:
+            flash("Champion already exists")
+            return redirect("/", code=302)
+        new_champion = Champions(champion_name=name, lane=lane)
+        db.session.add(new_champion)
+        db.session.commit()
+        uploaded_file = request.files["splash_art"]
+        upload_path = app.config["UPLOAD_PATH"]
+        if uploaded_file:
+            delete_file(new_champion.id)
+            timestamp = time.time()
+            uploaded_file.save(
+                f"{upload_path}/splash_art-{new_champion.id}-{timestamp}.jpg"
+            )
     return redirect("/", code=302)
 
 
 @app.route("/login")
 def login():
     """This is the endpoint to create a session for the web app"""
-    return render_template("login.html")
+    form = FlaskLoginForm()
+    return render_template("login.html", form=form)
 
 
 @app.route("/authenticate", methods=["POST"])
 def auth():
     """This is the endpoint for authenticate users"""
-    username = request.form["user_email"]
-    password = request.form["password"]
-    user = Users.query.filter_by(username=username).first()
-    if user:
-        if password == user.password:
-            session["user_email"] = username
-            flash("Authentication succeed with success")
-            return redirect("/", code=302)
+    form = FlaskLoginForm(request.form)
+    if form.validate_on_submit():
+        username = request.form["user_email"]
+        password = request.form["password"]
+        user = Users.query.filter_by(username=username).first()
+        if user:
+            if password == user.password:
+                session["user_email"] = username
+                flash("Authentication succeed with success")
+                return redirect("/", code=302)
     flash("Authentication failed")
     return redirect(url_for("login"), code=302)
 
