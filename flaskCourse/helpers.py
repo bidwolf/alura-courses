@@ -1,7 +1,34 @@
 """Module for create helpers for the application"""
 
 import os
+from flask_wtf import FlaskForm
+from wtforms.validators import DataRequired, Length
+from wtforms import SubmitField, StringField, PasswordField
 from app import app
+
+
+class FlaskChampionForm(FlaskForm):
+    """Form for the champion"""
+
+    champion_lane = StringField(
+        "Lane", validators=[DataRequired(), Length(min=3, max=10)]
+    )
+    champion_name = StringField(
+        "Champion Name", validators=[DataRequired(), Length(min=3, max=30)]
+    )
+    submit = SubmitField("Send")
+
+
+class FlaskLoginForm(FlaskForm):
+    """Form for user login"""
+
+    username = StringField(
+        "Username", validators=[DataRequired(), Length(min=3, max=30)]
+    )
+    password = PasswordField(
+        "Password", validators=[DataRequired(), Length(min=3, max=100)]
+    )
+    login = SubmitField("Login")
 
 
 def recover_image(cover_id):
