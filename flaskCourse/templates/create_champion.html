@@ -15,7 +15,10 @@
         <input type="file" name="splash_art" id="splash_art" class="w-96" accept=".jpg,.png" />
       </figcaption>
     </figure>
-    <button type="submit" class="bg-emerald-700 mix-blend-plus-lighter px-8 py-2">Send</button>
+    <div class="flex gap-2 items-center">
+      <a href="{{url_for('champion')}}" class="text-white bg-blue-600 px-8 py-2">Back</a>
+      <button type="submit" class="bg-emerald-700 mix-blend-plus-lighter px-8 py-2">Send</button>
+    </div>
   </fieldset>
 </form>
 {% endblock %}
