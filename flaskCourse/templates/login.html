@@ -5,9 +5,12 @@
     <legend>
       Add your favorite champion
     </legend>
-    <input name="user_email" type="text" placeholder="User name or E-mail" class="text-zinc-800" />
-    <input name="password" type="password" placeholder="Type your password" class="text-zinc-800" />
-    <button type="submit" class="bg-emerald-700 mix-blend-plus-lighter px-8 py-2">Login</button>
+    {{ form.csrf_token() }}
+    {{form.username.label}}
+    {{form.username(class="text-zinc-800 w-96", placeholder="Username")}}
+    {{form.password.label}}
+    {{form.password(class="text-zinc-800 w-96", placeholder="Type your password")}}
+    {{form.login(class="bg-emerald-700 mix-blend-plus-lighter px-8 py-2")}}
   </fieldset>
 </form>
 {% endblock %}
