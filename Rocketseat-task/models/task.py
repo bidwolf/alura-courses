@@ -20,7 +20,7 @@ class Task:
             "title": self.title,
             "description": self.description,
             "completed": self.completed,
-            "id": self.id,
+            "id": str(self.id),
         }
 
     def toggle_completed(self):
