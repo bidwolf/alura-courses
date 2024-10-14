@@ -39,17 +39,17 @@ def create():
 
 @app.route("/tasks", methods=["GET"])
 def list_all_tasks():
-    INITIAL_TASK_LIMIT = 50
+    default_task_limit = 50
     task_limit = limit = request.args.get("limit")
     task_offset = offset = request.args.get("offset")
     total = len(tasks)
 
     if task_limit and task_limit.isdigit():
-        limit = int(task_limit) if int(task_limit) > 0 else INITIAL_TASK_LIMIT
+        limit = int(task_limit) if int(task_limit) > 0 else default_task_limit
         task_limit = min(limit, total)
     else:
-        task_limit = total if total < INITIAL_TASK_LIMIT else INITIAL_TASK_LIMIT
-        limit = INITIAL_TASK_LIMIT
+        task_limit = total if total < default_task_limit else default_task_limit
+        limit = default_task_limit
     if task_offset and task_offset.isdigit():
         offset = int(task_offset)
         task_offset = min(int(task_offset), total)
@@ -68,6 +68,25 @@ def list_all_tasks():
     }
     return Response(
         status=200, response=json.dumps(response), content_type="Application/JSON"
+    )
+
+
+@app.route("/tasks/<int:task_id>", methods=["GET"])
+def get_task_by_id(task_id: int):
+    """Get the specified task"""
+    task = None
+    for t in tasks:
+        if t.id == task_id:
+            task = t
+            return Response(
+                status=200,
+                content_type="Application/JSON",
+                response=json.dumps(task.to_dict()),
+            )
+    return Response(
+        status=404,
+        content_type="Application/JSON",
+        response=json.dumps({"message": "Cannot find task."}),
     )
 
 
