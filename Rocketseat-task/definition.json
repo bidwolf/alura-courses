@@ -1,0 +1,525 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Python Course",
+        "description": "Learn the flask power in the web development"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:4444",
+            "description": "The local server for developers work on it",
+            "variables": {
+                "local": {
+                    "description": "ue",
+                    "default": "test",
+                    "enum": [
+                        "test",
+                        "prod",
+                        "dev"
+                    ]
+                }
+            }
+        }
+    ],
+    "paths": {
+        "/tasks": {
+            "get": {
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/quantityPayload"
+                },
+                "summary": "List all available tasks",
+                "responses": {
+                    "200": {
+                        "description": "All available tasks to be done",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Tasks"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No Tasks found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Unexpected error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create a task",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/taskPayload"
+                },
+                "responses": {
+                    "200": {
+                        "description": "The task created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "createdAt",
+                                        "task"
+                                    ],
+                                    "properties": {
+                                        "createdAt": {
+                                            "type": "string",
+                                            "example": "2024-08-20T00:00.00Z"
+                                        },
+                                        "task": {
+                                            "$ref": "#/components/schemas/Task"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Task not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Unexpected error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks/{TaskID}": {
+            "get": {
+                "summary": "Get a specific task by ID",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/TaskID"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Task with id {TaskID}",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Task"
+                                },
+                                "examples": {
+                                    "id": {
+                                        "description": "The current ID of the task",
+                                        "externalValue": "229",
+                                        "summary": "best identifier for use in a query on DB"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Task not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Unexpected error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update task information",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/TaskID"
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/taskPayload"
+                },
+                "responses": {
+                    "200": {
+                        "description": "The updated task itself",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "updatedAt",
+                                        "task"
+                                    ],
+                                    "properties": {
+                                        "updatedAt": {
+                                            "type": "string"
+                                        },
+                                        "task": {
+                                            "$ref": "#/components/schemas/Task"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Task not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Unexpected error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a given task by ID",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/TaskID"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The deleted task itself",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "deletedAt",
+                                        "task"
+                                    ],
+                                    "properties": {
+                                        "deletedAt": {
+                                            "description": "The datetime when the task has been deleted",
+                                            "type": "string"
+                                        },
+                                        "task": {
+                                            "$ref": "#/components/schemas/Task"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Task not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Unexpected error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Error"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Tasks": {
+                "type": "object",
+                "required": [
+                    "tasks",
+                    "limit",
+                    "offset",
+                    "total"
+                ],
+                "properties": {
+                    "limit": {
+                        "type": "number"
+                    },
+                    "total": {
+                        "type": "number"
+                    },
+                    "offset": {
+                        "type": "number"
+                    },
+                    "tasks": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Task"
+                        }
+                    }
+                }
+            },
+            "TaskID": {
+                "description": "The unique identifier of a task",
+                "type": "string",
+                "example": "3"
+            },
+            "Task": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "title",
+                    "description",
+                    "completed"
+                ],
+                "properties": {
+                    "id": {
+                        "$ref": "#/components/schemas/TaskID"
+                    },
+                    "title": {
+                        "description": "The task title",
+                        "type": "string",
+                        "example": "A great title"
+                    },
+                    "description": {
+                        "description": "The task description",
+                        "type": "string",
+                        "example": "good description"
+                    },
+                    "completed": {
+                        "type": "boolean",
+                        "example": false
+                    }
+                }
+            },
+            "QuantityLimit": {
+                "description": "Specifications about quantity and offset items returned",
+                "type": "object",
+                "properties": {
+                    "limit": {
+                        "type": "integer",
+                        "maximum": 100,
+                        "description": "The quantity of items that should be returned"
+                    },
+                    "offset": {
+                        "type": "integer",
+                        "description": "Number of items that would be skiped"
+                    }
+                }
+            },
+            "Error": {
+                "type": "object",
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "description": "A human readable error message",
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "requestBodies": {
+            "taskPayload": {
+                "description": "The task payload to be used",
+                "required": false,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "required": [
+                                "title",
+                                "description"
+                            ],
+                            "properties": {
+                                "title": {
+                                    "type": "string",
+                                    "description": "The title of the task"
+                                },
+                                "description": {
+                                    "type": "string",
+                                    "description": "A short description about the task writed in markdown"
+                                },
+                                "completed": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "quantityPayload": {
+                "description": "Quantity and offset of the current list",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/QuantityLimit"
+                        }
+                    }
+                }
+            }
+        },
+        "parameters": {
+            "TaskID": {
+                "description": "The task id used in the request",
+                "name": "TaskID",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "$ref": "#/components/schemas/TaskID"
+                }
+            }
+        },
+        "securitySchemes": {
+            "ApiKey": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "X-Api-Key"
+            }
+        }
+    },
+    "security": [
+        {
+            "ApiKey": []
+        }
+    ]
+}
