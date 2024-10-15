@@ -90,5 +90,39 @@ def get_task_by_id(task_id: int):
     )
 
 
+@app.route("/tasks/<int:task_id>", methods=["PUT"])
+def update_task(task_id: int):
+    """Update the task with the given id"""
+    if not task_id:
+        return Response(
+            status=400,
+            content_type="Application/JSON",
+            response=json.dumps({"message": "Task id is required for this request."}),
+        )
+    if not isinstance(task_id, int):
+        return Response(
+            status=400,
+            content_type="Application/JSON",
+            response=json.dumps({"message": "Task id must be integer"}),
+        )
+    for task in tasks:
+        if task.id == task_id:
+            data = request.get_json()
+            task.title = data["title"]
+            task.description = data["description"]
+            task.completed = data["completed"]
+            updated_at = datetime.datetime.now().isoformat()
+            return Response(
+                status=200,
+                content_type="Application/JSON",
+                response=json.dumps({"updatedAt": updated_at, "task": task.to_dict()}),
+            )
+    return Response(
+        status=404,
+        content_type="Application/JSON",
+        response=json.dumps({"message": "Cannot find any task with this id"}),
+    )
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=4444)
