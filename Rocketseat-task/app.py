@@ -124,5 +124,40 @@ def update_task(task_id: int):
     )
 
 
+@app.route("/tasks/<int:task_id>", methods=["DELETE"])
+def delete_task(task_id: int):
+    """Delete the task with the given id"""
+    if not task_id:
+        return Response(
+            status=400,
+            content_type="Application/JSON",
+            response=json.dumps({"message": "Task id is required for this request."}),
+        )
+    if not isinstance(task_id, int):
+        return Response(
+            status=400,
+            content_type="Application/JSON",
+            response=json.dumps({"message": "Task id must be integer"}),
+        )
+    deleted_task = None
+    for task in tasks:
+        if task.id == task_id:
+            deleted_task = task
+            break
+    deleted_at = datetime.datetime.now().isoformat()
+    if not deleted_task:
+        return Response(
+            status=404,
+            content_type="Application/JSON",
+            response=json.dumps({"message": "Invalid task id"}),
+        )
+    tasks.remove(deleted_task)
+    return Response(
+        status=200,
+        content_type="Application/JSON",
+        response=json.dumps({"deletedAt": deleted_at, "task": deleted_task.to_dict()}),
+    )
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=4444)
