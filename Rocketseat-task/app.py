@@ -33,7 +33,7 @@ def create():
     response = {"createdAt": created_at, "task": new_task.to_dict()}
     task_id_control += 1
     return Response(
-        status=200, response=json.dumps(response), content_type="Application/JSON"
+        status=201, response=json.dumps(response), content_type="Application/JSON"
     )
 
 
