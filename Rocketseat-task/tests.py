@@ -43,3 +43,18 @@ def test_get_task_list():
     assert "tasks" in response_json
     assert len(response_json["tasks"]) <= params["limit"]
     assert len(response_json["tasks"]) <= response_json["total"]
+
+
+def test_get_task_by_id():
+    """
+    Ensures that the task with the given id is correctly returned
+    """
+    if tasks and len(tasks) > 0:
+        task_id = tasks[0]
+        response = requests.get(f"{BASE_URL}/tasks/{task_id}", timeout=5000)
+        response_json = response.json()
+        assert response.status_code == 200
+        assert "id" in response_json
+        assert "title" in response_json
+        assert "description" in response_json
+        assert "completed" in response_json
