@@ -6,6 +6,10 @@ tasks: list[Task] = []
 
 
 def test_create_task():
+    """Ensures that a created task should return a json accordingly the schema below
+    - task (the task created containing id, description, title and completed properties)
+    - createdAt (datetime when the task has been created)
+    """
     new_task_data = {
         "title": "title for test suite",
         "description": "this is a test using pytest",
@@ -20,3 +24,22 @@ def test_create_task():
     assert "description" in response_json["task"]
     assert "completed" in response_json["task"]
     assert not response_json["task"]["completed"]
+    tasks.append(response_json["task"]["id"])
+
+
+def test_get_task_list():
+    """
+    Ensures that the task list should return a json accordingly the schema below
+    - tasks (the task list)
+    - limit (the limit of tasks that will be returned)
+    - offset (A quantity of tasks that will be ignored to pagination feature)
+    """
+    params = {"limit": 20, "offset": 0}
+    response = requests.get(f"{BASE_URL}/tasks", timeout=5000, params=params)
+    response_json = response.json()
+    assert response.status_code == 200
+    assert "limit" in response_json
+    assert "total" in response_json
+    assert "tasks" in response_json
+    assert len(response_json["tasks"]) <= params["limit"]
+    assert len(response_json["tasks"]) <= response_json["total"]
