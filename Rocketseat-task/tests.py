@@ -15,16 +15,17 @@ def test_create_task():
         "description": "this is a test using pytest",
     }
     response = requests.post(f"{BASE_URL}/tasks", json=new_task_data, timeout=5000)
-    response_json = response.json()
     assert response.status_code == 201
+    response_json = response.json()
     assert "task" in response_json
     assert "createdAt" in response_json
-    assert "id" in response_json["task"]
-    assert "title" in response_json["task"]
-    assert "description" in response_json["task"]
-    assert "completed" in response_json["task"]
-    assert not response_json["task"]["completed"]
-    tasks.append(response_json["task"]["id"])
+    task = response_json["task"]
+    assert "id" in task
+    assert "title" in task
+    assert "description" in task
+    assert "completed" in task
+    assert not task["completed"]
+    tasks.append(task["id"])
 
 
 def test_get_task_list():
@@ -36,13 +37,14 @@ def test_get_task_list():
     """
     params = {"limit": 20, "offset": 0}
     response = requests.get(f"{BASE_URL}/tasks", timeout=5000, params=params)
-    response_json = response.json()
     assert response.status_code == 200
+    response_json = response.json()
     assert "limit" in response_json
     assert "total" in response_json
     assert "tasks" in response_json
-    assert len(response_json["tasks"]) <= params["limit"]
-    assert len(response_json["tasks"]) <= response_json["total"]
+    quantity_of_tasks = len(response_json["tasks"])
+    assert quantity_of_tasks <= params["limit"]
+    assert quantity_of_tasks <= response_json["total"]
 
 
 def test_get_task_by_id():
@@ -52,8 +54,8 @@ def test_get_task_by_id():
     if tasks and len(tasks) > 0:
         task_id = tasks[0]
         response = requests.get(f"{BASE_URL}/tasks/{task_id}", timeout=5000)
-        response_json = response.json()
         assert response.status_code == 200
+        response_json = response.json()
         assert "id" in response_json
         assert "title" in response_json
         assert "description" in response_json
