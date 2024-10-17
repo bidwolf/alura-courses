@@ -60,3 +60,27 @@ def test_get_task_by_id():
         assert "title" in response_json
         assert "description" in response_json
         assert "completed" in response_json
+
+
+def test_update_task():
+    """Ensures that the task with the given id is correctly updated"""
+    if tasks and len(tasks) > 0:
+        task_id = tasks[0]
+        payload = {
+            "title": "updated title",
+            "description": "this is a test for update a task",
+            "completed": True,
+        }
+        response = requests.put(
+            f"{BASE_URL}/tasks/{task_id}", timeout=5000, json=payload
+        )
+        assert response.status_code == 200
+        response_json = response.json()
+        assert "updatedAt" in response_json
+        assert "task" in response_json
+        response = requests.get(f"{BASE_URL}/tasks/{task_id}", timeout=5000)
+        assert response.status_code == 200
+        response_json = response.json()
+        assert response_json["title"] == payload["title"]
+        assert response_json["description"] == payload["description"]
+        assert response_json["completed"] == payload["completed"]
