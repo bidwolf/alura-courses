@@ -84,3 +84,12 @@ def test_update_task():
         assert response_json["title"] == payload["title"]
         assert response_json["description"] == payload["description"]
         assert response_json["completed"] == payload["completed"]
+
+
+def test_delete_task():
+    if tasks and len(tasks) > 0:
+        task_id = tasks[0]
+        response = requests.delete(f"{BASE_URL}/tasks/{task_id}", timeout=5000)
+        assert response.status_code == 200
+        response = requests.get(f"{BASE_URL}/tasks/{task_id}", timeout=5000)
+        assert response.status_code == 404
