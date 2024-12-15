@@ -1,9 +1,12 @@
+"""This module contains the User model."""
+
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column
+from flask_login import UserMixin
 from database import db
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     """This is the User model."""
 
     id: Mapped[int] = mapped_column(Integer(), primary_key=True)
