@@ -1,0 +1,140 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+      "version": "1.0.0",
+      "title": "Flask Auth",
+      "description": "Using authentication flow with flask_login"
+  },
+  "servers": [
+      {
+          "url": "http://localhost:4444",
+          "description": "The local server for developers work on it",
+          "variables": {
+              "local": {
+                  "description": "The environment variable setup",
+                  "default": "test",
+                  "enum": [
+                      "test",
+                      "prod",
+                      "dev"
+                  ]
+              }
+          }
+      }
+  ],
+  "paths": {
+      "/signup": {
+          "post": {
+              "summary": "Endpoint for register a user.",
+              "requestBody": {
+                  "$ref": "#/components/requestBodies/registerPayload"
+              },
+              "responses": {
+                  "201": {
+                      "description": "The user has been registered",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref":"#/components/schemas/Response"
+                              }
+                          }
+                      }
+                  },
+                  "400": {
+                      "description": "The payload is invalid",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref":"#/components/schemas/Response"
+                              }
+                          }
+                      }
+                  },
+                  "500": {
+                      "description": "Internal server error",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref":"#/components/schemas/Response"
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  },
+  "components": {
+      "schemas": {
+          "User": {
+              "type": "object",
+              "required": [
+                  "username",
+                  "password",
+                  "email"
+              ],
+              "properties": {
+                  "username": {
+                      "type": "string",
+                      "maxLength": 32,
+                      "minLength": 4
+                  },
+                  "password": {
+                      "type": "string",
+                      "maxLength": 32,
+                      "minLength": 6
+                  },
+                  "email": {
+                      "type": "string",
+                      "maxLength": 64,
+                      "format": "email"
+                  }
+              }
+          },
+          "Response": {
+              "type": "object",
+              "required": [
+                  "message",
+                  "error"
+              ],
+              "properties": {
+                  "message": {
+                      "description": "A human readable error message",
+                      "type": "string"
+                  },
+                  "error":{
+                      "description": "Tells if the current request has errors",
+                      "type":"boolean"
+                  }
+              }
+          }
+      },
+      "requestBodies": {
+          "registerPayload": {
+              "description": "Fields for user registration",
+              "content": {
+                  "application/json": {
+                      "schema": {
+                          "$ref": "#/components/schemas/User"
+                      },
+                      "examples": {
+                          "username": {
+                              "description": "test username",
+                              "externalValue": "test_username"
+                          },
+                          "password": {
+                              "description": "test password",
+                              "externalValue": "123456"
+                          },
+                          "email": {
+                              "description": "test email",
+                              "externalValue": "jhondoe@example.com"
+                          }
+                      }
+                  }
+              },
+              "required": true
+          }
+      }
+  }
+}
