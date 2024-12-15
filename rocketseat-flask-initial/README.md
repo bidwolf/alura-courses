@@ -5,6 +5,11 @@ This is a project to learn how to use Flask to create a simple authentication sy
 ## Setup
 
 <!-- Here you show how to setup database, environment and all stuff you need -->
+### Environment Variables
+To setup the environment variables you need to create a `.env` file in the root of the project following the `.env.example` file.
+#### Environment purposes
+- APP_SECRET_KEY: Flask secret key
+### Database
 To setup the database you need to run the following commands:
 ```bash
 # uses the flask shell to create the database
