@@ -145,7 +145,7 @@ def login():
         return make_response(
             {"message": "The password should be a string.", "error": True}, 400
         )
-    if user and password:
+    if username and password:
         user = User.query.filter_by(username=username).first()
         if not user or not user.check_password(password):
             return make_response(
