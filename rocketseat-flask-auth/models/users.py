@@ -13,5 +13,5 @@ class User(db.Model, UserMixin):
     username: Mapped[str] = mapped_column(
         String(length=32), unique=True, nullable=False
     )
-    email: Mapped[str] = mapped_column(String(length=32), unique=True, nullable=False)
+    email: Mapped[str] = mapped_column(String(length=64), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(String(length=32), nullable=False)
