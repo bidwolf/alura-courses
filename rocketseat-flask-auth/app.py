@@ -3,12 +3,17 @@ import re
 from flask import Flask, request, make_response
 from database import db
 from models.users import User
-
+from flask_login import LoginManager,login_user,current_user
 app = Flask(__name__)
 app.config.from_pyfile("config.py")
 
+login_manager = LoginManager()
 db.init_app(app)
-
+login_manager.init_app(app)
+login_manager.login_view = "login"
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
 @app.route("/signup", methods=["POST"])
 def signup():
     """This is the signup route."""
@@ -110,6 +115,53 @@ def signup():
                 500,
             )
 
-
+@app.route("/login",methods=["POST"])
+def login():
+    """ This is the login route. """
+    data = request.get_json()
+    if not data:
+        return make_response(
+            {
+                "message": "You should provide a username and a password to login.",
+                "error": True,
+            },
+            400,
+        )
+    username = data.get("username")
+    password = data.get("password")
+    if not username:
+        return make_response(
+            {"message": "You should provide a username.", "error": True}, 400
+        )
+    if not password:
+        return make_response(
+            {"message": "You should provide a password.", "error": True}, 400
+        )
+    if not isinstance(username, str):
+        return make_response(
+            {"message": "The username should be a string.", "error": True}, 400
+        )
+    if not isinstance(password, str):
+        return make_response(
+            {"message": "The password should be a string.", "error": True}, 400
+        )
+    if user and password:
+        user = User.query.filter_by(username=username).first()
+        if not user or not user.check_password(password):
+            return make_response(
+                {
+                    "message": "Username or password invalid.",
+                    "error": True,
+                },
+                401,
+            )
+        login_user(user)
+        return make_response(
+            {
+                "message": "User logged in successfully.",
+                "error": False,
+            },
+            200,
+        )
 if __name__ == "__main__":
     app.run(debug=True, port=4444)
