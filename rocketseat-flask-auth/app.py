@@ -60,7 +60,7 @@ def signup():
     if len(password) < 6 or len(password) > 32:
         return make_response(
             {
-                "message": "The password should have should have between 6 and 32 characters.",
+                "message": "The password should have between 6 and 32 characters.",
                 "error": True,
             },
             400,
