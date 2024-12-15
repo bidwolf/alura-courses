@@ -15,3 +15,5 @@ class User(db.Model, UserMixin):
     )
     email: Mapped[str] = mapped_column(String(length=64), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(String(length=32), nullable=False)
+    def check_password(self,password:str)->bool:
+        return self.password==password
