@@ -11,5 +11,8 @@
     "SGBD",
     "Willump",
     "wtforms"
-  ]
+  ],
+"pylint.args": [
+    "--rcfile=${workspaceFolder}/.pylintrc"
+]
 }

@@ -1,0 +1,2 @@
+# Gitignore file specific for the flask module
+/instance
