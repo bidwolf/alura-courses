@@ -87,6 +87,73 @@
                 }
             }
         },
+        "/user/{userId}": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/userId"
+                    }
+                ],
+                "operationId": "getUser",
+                "summary": "Endpoint to get a user information.",
+                "responses": {
+                    "200": {
+                        "description": "User found data",
+                        "headers": {
+                            "Connection": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Length": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Type": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Date": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Server": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Vary": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/userResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/ServerError"
+                    }
+                }
+            }
+        },
         "/login": {
             "post": {
                 "operationId": "signIn",
@@ -212,25 +279,47 @@
     },
     "components": {
         "schemas": {
+            "UserId": {
+                "description": "The unique identifier of the user",
+                "type": "integer"
+            },
+            "Username": {
+                "description": "The username used for login purposes",
+                "type": "object",
+                "required": [
+                    "username"
+                ],
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "maxLength": 32,
+                        "minLength": 4
+                    }
+                }
+            },
             "User": {
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/Auth"
                     },
                     {
-                        "type": "object",
-                        "required": [
-                            "email"
-                        ],
-                        "properties": {
-                            "email": {
-                                "type": "string",
-                                "maxLength": 64,
-                                "format": "email"
-                            }
-                        }
+                        "$ref": "#/components/schemas/Email"
                     }
                 ]
+            },
+            "Email": {
+                "description": "The user email field",
+                "type": "object",
+                "required": [
+                    "email"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "maxLength": 64,
+                        "format": "email"
+                    }
+                }
             },
             "Auth": {
                 "type": "object",
@@ -266,6 +355,31 @@
                         "description": "Tells if the current request has errors",
                         "type": "boolean"
                     }
+                }
+            },
+            "userResponse": {
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Response"
+                    },
+                    {
+                        "$ref": "#/components/schemas/Email"
+                    },
+                    {
+                        "$ref": "#/components/schemas/Username"
+                    }
+                    
+                ]
+            }
+        },
+        "parameters": {
+            "userId": {
+                "description": "The user id used in the request",
+                "name": "userId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "$ref": "#/components/schemas/UserId"
                 }
             }
         },
@@ -346,11 +460,6 @@
                             "type": "string"
                         }
                     },
-                    "Set-Cookie": {
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
                     "Connection": {
                         "schema": {
                             "type": "string"
@@ -389,11 +498,6 @@
                         }
                     },
                     "Vary": {
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "Set-Cookie": {
                         "schema": {
                             "type": "string"
                         }
@@ -452,6 +556,48 @@
                     }
                 },
                 "description": "Unauthorized",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Response"
+                        }
+                    }
+                }
+            },
+            "NotFound": {
+                "headers": {
+                    "Server": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Date": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Type": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Length": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Vary": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Connection": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "description": "Content not found",
                 "content": {
                     "application/json": {
                         "schema": {
