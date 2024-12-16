@@ -24,6 +24,8 @@
     ],
     "paths": {
         "/user": {
+            "summary": "Endpoint for generally User operations",
+            "description": "This endpoint is responsible to due with generally User data like create a new User, or list all existent users",
             "post": {
                 "operationId": "createUser",
                 "summary": "Endpoint for register a user.",
@@ -88,6 +90,8 @@
             }
         },
         "/user/{userId}": {
+            "summary": "Endpoint to Specific User operations",
+            "description": "This endpoint is responsible to read and manipulate a specific user data",
             "get": {
                 "parameters": [
                     {
@@ -98,6 +102,89 @@
                 "summary": "Endpoint to get a user information.",
                 "responses": {
                     "200": {
+                        "description": "User found data",
+                        "headers": {
+                            "Connection": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Length": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Type": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Date": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Server": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Vary": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/userResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/ServerError"
+                    }
+                }
+            },
+            "put": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/userId"
+                    }
+                ],
+                "operationId": "updateUser",
+                "summary": "Endpoint to update a user information.",
+                "requestBody": {
+                    "description": "The data that should be updated",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "anyOf": [
+                                    {
+                                        "$ref": "#/components/schemas/Email"
+                                    },
+                                    {
+                                        "$ref": "#/components/schemas/Password"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
                         "description": "User found data",
                         "headers": {
                             "Connection": {
@@ -297,6 +384,20 @@
                     }
                 }
             },
+            "Password": {
+                "description": "The password used for login purposes",
+                "type": "object",
+                "required": [
+                    "password"
+                ],
+                "properties": {
+                    "password": {
+                        "type": "string",
+                        "maxLength": 32,
+                        "minLength": 6
+                    }
+                }
+            },
             "User": {
                 "allOf": [
                     {
@@ -368,7 +469,6 @@
                     {
                         "$ref": "#/components/schemas/Username"
                     }
-                    
                 ]
             }
         },
