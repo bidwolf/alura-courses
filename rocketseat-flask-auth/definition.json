@@ -25,12 +25,50 @@
     "paths": {
         "/signup": {
             "post": {
+                "operationId": "createUser",
                 "summary": "Endpoint for register a user.",
                 "requestBody": {
                     "$ref": "#/components/requestBodies/registerPayload"
                 },
                 "responses": {
                     "201": {
+                        "headers": {
+                            "Server": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Date": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Type": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Length": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Vary": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Set-Cookie": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Connection": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
                         "description": "The user has been registered",
                         "content": {
                             "application/json": {
@@ -41,36 +79,60 @@
                         }
                     },
                     "400": {
-                        "description": "The payload is invalid",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/BadRequest"
                     },
                     "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/ServerError"
                     }
                 }
             }
         },
         "/login": {
             "post": {
+                "operationId": "signIn",
                 "summary": "Endpoint for login a existent user.",
                 "requestBody": {
                     "$ref": "#/components/requestBodies/loginPayload"
                 },
                 "responses": {
                     "200": {
+                        "headers": {
+                            "Server": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Date": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Type": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Length": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Vary": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Set-Cookie": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Connection": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
                         "description": "The user has been authenticated",
                         "content": {
                             "application/json": {
@@ -81,7 +143,58 @@
                         }
                     },
                     "400": {
-                        "description": "The payload is invalid",
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "get": {
+                "operationId": "signOut",
+                "summary": "Endpoint for logout a authenticated user",
+                "responses": {
+                    "200": {
+                        "headers": {
+                            "Server": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Date": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Type": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Length": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Vary": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Set-Cookie": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Connection": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "description": "User logged out.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -91,14 +204,7 @@
                         }
                     },
                     "401": {
-                        "description": "Unauthorized user",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
+                        "$ref": "#/components/responses/Unauthorized"
                     }
                 }
             }
@@ -107,29 +213,24 @@
     "components": {
         "schemas": {
             "User": {
-                "type": "object",
-                "required": [
-                    "username",
-                    "password",
-                    "email"
-                ],
-                "properties": {
-                    "username": {
-                        "type": "string",
-                        "maxLength": 32,
-                        "minLength": 4
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Auth"
                     },
-                    "password": {
-                        "type": "string",
-                        "maxLength": 32,
-                        "minLength": 6
-                    },
-                    "email": {
-                        "type": "string",
-                        "maxLength": 64,
-                        "format": "email"
+                    {
+                        "type": "object",
+                        "required": [
+                            "email"
+                        ],
+                        "properties": {
+                            "email": {
+                                "type": "string",
+                                "maxLength": 64,
+                                "format": "email"
+                            }
+                        }
                     }
-                }
+                ]
             },
             "Auth": {
                 "type": "object",
@@ -214,6 +315,150 @@
                     }
                 },
                 "required": true
+            }
+        },
+        "headers": {},
+        "responses": {
+            "BadRequest": {
+                "headers": {
+                    "Server": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Date": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Type": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Length": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Vary": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Set-Cookie": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Connection": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "description": "The payload is invalid",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Response"
+                        }
+                    }
+                }
+            },
+            "ServerError": {
+                "headers": {
+                    "Server": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Date": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Type": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Length": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Vary": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Set-Cookie": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Connection": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "description": "Internal server error",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Response"
+                        }
+                    }
+                }
+            },
+            "Unauthorized": {
+                "headers": {
+                    "Server": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Date": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Type": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Length": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Vary": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Set-Cookie": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Connection": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "description": "Unauthorized",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Response"
+                        }
+                    }
+                }
             }
         }
     }
