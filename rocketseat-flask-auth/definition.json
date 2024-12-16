@@ -239,6 +239,71 @@
                         "$ref": "#/components/responses/ServerError"
                     }
                 }
+            },
+            "delete": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/userId"
+                    }
+                ],
+                "operationId": "getUser",
+                "summary": "Endpoint to delete a user information.",
+                "responses": {
+                    "200": {
+                        "description": "Deleted user data",
+                        "headers": {
+                            "Connection": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Length": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Type": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Date": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Server": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Vary": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/userResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/ServerError"
+                    }
+                }
             }
         },
         "/login": {
