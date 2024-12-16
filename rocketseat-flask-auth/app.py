@@ -149,7 +149,7 @@ def get_user(user_id):
     if not isinstance(user_id, int):
         return make_response(
             {
-                "message": "You should provide a integer value for user id.",
+                "message": "You should provide an integer value for user ID.",
                 "error": True,
             }
         )
