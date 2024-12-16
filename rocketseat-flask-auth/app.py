@@ -3,7 +3,7 @@ import re
 from flask import Flask, request, make_response
 from database import db
 from models.users import User
-from flask_login import LoginManager,login_user,current_user
+from flask_login import LoginManager,login_user,current_user,logout_user,login_required
 app = Flask(__name__)
 app.config.from_pyfile("config.py")
 
@@ -14,6 +14,16 @@ login_manager.login_view = "login"
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    return make_response(
+        {
+            "message": "You should be logged in to access this route.",
+            "error": True,
+        },
+        401,
+    )
 @app.route("/signup", methods=["POST"])
 def signup():
     """This is the signup route."""
@@ -163,5 +173,17 @@ def login():
             },
             200,
         )
+
+@app.route("/logout",methods=["GET"])
+@login_required
+def logout():
+    logout_user()
+    return make_response(
+        {
+            "message": "User logged out successfully.",
+            "error": False,
+        },
+        200,
+    )
 if __name__ == "__main__":
     app.run(debug=True, port=4444)
