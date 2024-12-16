@@ -124,7 +124,44 @@ def signup():
                 },
                 500,
             )
-
+@app.route("/user/<int:user_id>",methods=["GET"])
+@login_required
+def get_user(user_id):
+    """ This is the get user route. """
+    if not user_id:
+        return make_response(
+            {
+                "message": "You should provide a user id.",
+                "error": True,
+            }
+        )
+    try:
+        user = User.query.get(user_id)
+        if not user:
+            return make_response(
+                {
+                    "message": "User not found.",
+                    "error": True,
+                },
+                404,
+            )
+        return make_response(
+            {
+                "username": user.username,
+                "email": user.email,
+                "error": False,
+                "message": "User found successfully.",
+            },200
+        )
+    except Exception as e:
+        print(e)
+        return make_response(
+            {
+                "message": "An error occurred while getting the user.",
+                "error": True,
+            },
+            500,
+        )
 @app.route("/login",methods=["POST"])
 def login():
     """ This is the login route. """
