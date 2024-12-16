@@ -23,7 +23,7 @@
         }
     ],
     "paths": {
-        "/signup": {
+        "/user": {
             "post": {
                 "operationId": "createUser",
                 "summary": "Endpoint for register a user.",

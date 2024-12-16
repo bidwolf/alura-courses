@@ -24,7 +24,7 @@ def unauthorized():
         },
         401,
     )
-@app.route("/signup", methods=["POST"])
+@app.route("/user", methods=["POST"])
 def signup():
     """This is the signup route."""
     data = request.get_json()
