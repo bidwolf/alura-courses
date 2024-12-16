@@ -24,6 +24,24 @@ def unauthorized():
         },
         401,
     )
+@app.errorhandler(400)
+def bad_request(error):
+    return make_response(
+        {
+            "message": "Bad request.",
+            "error": True,
+        },
+        400,
+    )
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(
+        {
+            "message": "Content Not Found.",
+            "error": True,
+        },
+        404,
+    )
 @app.route("/user", methods=["POST"])
 def signup():
     """This is the signup route."""
@@ -128,10 +146,10 @@ def signup():
 @login_required
 def get_user(user_id):
     """ This is the get user route. """
-    if not user_id:
+    if not isinstance(user_id, int):
         return make_response(
             {
-                "message": "You should provide a user id.",
+                "message": "You should provide a integer value for user id.",
                 "error": True,
             }
         )
