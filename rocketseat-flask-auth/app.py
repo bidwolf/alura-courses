@@ -1,9 +1,18 @@
 """ This is the main file of the project. """
-import re
+
+import datetime
 from flask import Flask, request, make_response
+from flask_login import (
+    LoginManager,
+    login_user,
+    current_user,
+    logout_user,
+    login_required,
+)
 from database import db
 from models.users import User
-from flask_login import LoginManager,login_user,current_user,logout_user,login_required
+from utils import is_valid_email
+
 app = Flask(__name__)
 app.config.from_pyfile("config.py")
 
@@ -11,9 +20,12 @@ login_manager = LoginManager()
 db.init_app(app)
 login_manager.init_app(app)
 login_manager.login_view = "login"
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(user_id)
+
 
 @login_manager.unauthorized_handler
 def unauthorized():
@@ -24,6 +36,8 @@ def unauthorized():
         },
         401,
     )
+
+
 @app.errorhandler(400)
 def bad_request(error):
     return make_response(
@@ -33,6 +47,8 @@ def bad_request(error):
         },
         400,
     )
+
+
 @app.errorhandler(404)
 def not_found(error):
     return make_response(
@@ -42,6 +58,8 @@ def not_found(error):
         },
         404,
     )
+
+
 @app.route("/user", methods=["POST"])
 def signup():
     """This is the signup route."""
@@ -69,7 +87,7 @@ def signup():
         return make_response(
             {"message": "You should provide an email.", "error": True}, 400
         )
-    
+
     if not isinstance(username, str):
         return make_response(
             {"message": "The username should be a string.", "error": True}, 400
@@ -98,7 +116,7 @@ def signup():
             },
             400,
         )
-    if not re.match(r"[^@]+@[^@]+\.[^@]+", email) or len(email)>64:
+    if not is_valid_email(email):
         return make_response(
             {"message": "The email should be valid.", "error": True}, 400
         )
@@ -112,7 +130,7 @@ def signup():
                     "message": "The username is already in use.",
                     "error": True,
                 },
-                400,
+                409,
             )
         if user and user.email == email:
             return make_response(
@@ -120,7 +138,7 @@ def signup():
                     "message": "The email is already in use.",
                     "error": True,
                 },
-                400,
+                409,
             )
         try:
             user = User(username=username, password=password, email=email)
@@ -142,10 +160,12 @@ def signup():
                 },
                 500,
             )
-@app.route("/user/<int:user_id>",methods=["GET"])
+
+
+@app.route("/user/<int:user_id>", methods=["GET"])
 @login_required
 def get_user(user_id):
-    """ This is the get user route. """
+    """This is the get user route."""
     if not isinstance(user_id, int):
         return make_response(
             {
@@ -169,7 +189,8 @@ def get_user(user_id):
                 "email": user.email,
                 "error": False,
                 "message": "User found successfully.",
-            },200
+            },
+            200,
         )
     except Exception as e:
         print(e)
@@ -180,9 +201,96 @@ def get_user(user_id):
             },
             500,
         )
-@app.route("/login",methods=["POST"])
+
+
+@app.route("/user/<int:user_id>", methods=["PUT"])
+@login_required
+def update_user(user_id):
+    """This is the update user route."""
+    data = request.get_json()
+    if not data:
+        return make_response(
+            {
+                "message": "You should provide a data to update the user information",
+                "error": True,
+            },
+            400,
+        )
+    new_email = data.get("email")
+    new_password = data.get("password")
+    if not new_password and not new_email:
+        return make_response(
+            {
+                "message": "You should provide a data to update the user information",
+                "error": True,
+            },
+            400,
+        )
+    if not isinstance(user_id, int):
+        return make_response(
+            {
+                "message": "You should provide an integer value for user ID.",
+                "error": True,
+            },
+            400,
+        )
+    try:
+        user = db.session.query(User).get(user_id)
+        if not user:
+            return make_response({"message": "User not found.", "error": True}, 404)
+        if new_email and user.email != new_email:
+            if not is_valid_email(new_email):
+                return make_response(
+                    {"message": "The email should be valid.", "error": True}, 400
+                )
+            existent_email_query = (
+                db.session.query(User).filter(User.email == new_email).first()
+                is not None
+            )
+            if existent_email_query:
+                return make_response(
+                    {
+                        "message": "This email is already registered by someone else, please check the email provided.",
+                        "error": True,
+                    },
+                    409,
+                )
+        if new_password:
+            if len(new_password) < 6 or len(new_password) > 32:
+                return make_response(
+                    {
+                        "message": "The password should have between 6 and 32 characters.",
+                        "error": True,
+                    },
+                    400,
+                )
+        user.password = new_password if new_password else user.password
+        user.email = new_email if new_email else user.email
+        db.session.commit()
+        updated_at = datetime.datetime.now()
+        return make_response(
+            {
+                "message": "User updated successfully.",
+                "error": False,
+                "user": {
+                    "email": user.email,
+                    "id": user.id,
+                    "username": user.username,
+                },
+                "updated_at": updated_at,
+            },
+            201,
+        )
+    except Exception as e:
+        print(e)
+        return make_response(
+            {"message": "Something went wrong while updating the user.", "error": True}
+        )
+
+
+@app.route("/login", methods=["POST"])
 def login():
-    """ This is the login route. """
+    """This is the login route."""
     data = request.get_json()
     if not data:
         return make_response(
@@ -229,7 +337,8 @@ def login():
             200,
         )
 
-@app.route("/logout",methods=["GET"])
+
+@app.route("/logout", methods=["GET"])
 @login_required
 def logout():
     logout_user()
@@ -240,5 +349,7 @@ def logout():
         },
         200,
     )
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=4444)
