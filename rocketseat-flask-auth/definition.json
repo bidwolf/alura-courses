@@ -83,6 +83,9 @@
                     "400": {
                         "$ref": "#/components/responses/BadRequest"
                     },
+                    "409":{
+                        "$ref":"#/components/responses/Conflict"
+                    },
                     "500": {
                         "$ref": "#/components/responses/ServerError"
                     }
@@ -289,8 +292,8 @@
                 "operationId": "getUser",
                 "summary": "Endpoint to delete a user information.",
                 "responses": {
-                    "200": {
-                        "description": "Deleted user data",
+                    "204": {
+                        "description": "Deleted user response",
                         "headers": {
                             "Connection": {
                                 "schema": {
@@ -325,9 +328,7 @@
                         },
                         "content": {
                             "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/userResponse"
-                                }
+                                
                             }
                         }
                     },
