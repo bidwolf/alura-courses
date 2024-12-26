@@ -244,6 +244,14 @@ def update_user(user_id):
         )
     try:
         user = db.session.query(User).get(user_id)
+        if user_id != current_user.id:
+            return make_response(
+                {
+                    "message": "You don't have permission to update this user.",
+                    "error": True,
+                },
+                http.HTTPStatus.FORBIDDEN,
+            )
         if not user:
             return make_response(
                 {"message": "User not found.", "error": True}, http.HTTPStatus.NOT_FOUND
@@ -316,6 +324,14 @@ def delete_user(user_id):
         if not user:
             return make_response(
                 {"message": "User not found.", "error": True}, http.HTTPStatus.NOT_FOUND
+            )
+        if user_id != current_user.id:
+            return make_response(
+                {
+                    "message": "You don't have permission to delete this user.",
+                    "error": True,
+                },
+                http.HTTPStatus.FORBIDDEN,
             )
         db.session.delete(user)
         db.session.commit()
