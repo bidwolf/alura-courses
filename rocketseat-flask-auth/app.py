@@ -11,7 +11,7 @@ from flask_login import (
 )
 from database import db
 from models.users import User
-from utils import is_valid_email
+from utils import is_valid_email, encrypt_password
 import http
 
 app = Flask(__name__)
@@ -149,7 +149,12 @@ def signup():
                 http.HTTPStatus.CONFLICT,
             )
         try:
-            user = User(username=username, password=password, email=email, role="user")
+            user = User(
+                username=username,
+                password=encrypt_password(password=password),
+                email=email,
+                role="user",
+            )
             db.session.add(user)
             db.session.commit()
             return make_response(
@@ -283,7 +288,9 @@ def update_user(user_id):
                     },
                     http.HTTPStatus.BAD_REQUEST,
                 )
-        user.password = new_password if new_password else user.password
+        user.password = (
+            encrypt_password(password=new_password) if new_password else user.password
+        )
         user.email = new_email if new_email else user.email
         db.session.commit()
         updated_at = datetime.datetime.now()
