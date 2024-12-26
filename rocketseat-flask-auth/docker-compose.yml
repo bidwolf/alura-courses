@@ -1,0 +1,17 @@
+version: '3.1'
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_USER: ${DB_USER} 
+      MYSQL_PASSWORD: ${DB_PASSWORD} 
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} 
+      MYSQL_DATABASE: ${DB_NAME}
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    expose:
+      - "${DB_PORT}"  
+
+    volumes:
+      - /home/letus/mysql:/var/lib/mysql
