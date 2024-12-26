@@ -149,7 +149,7 @@ def signup():
                 http.HTTPStatus.CONFLICT,
             )
         try:
-            user = User(username=username, password=password, email=email)
+            user = User(username=username, password=password, email=email, role="user")
             db.session.add(user)
             db.session.commit()
             return make_response(
@@ -244,7 +244,7 @@ def update_user(user_id):
         )
     try:
         user = db.session.query(User).get(user_id)
-        if user_id != current_user.id:
+        if current_user.role == "user" and user_id != current_user.id:
             return make_response(
                 {
                     "message": "You don't have permission to update this user.",
@@ -325,7 +325,7 @@ def delete_user(user_id):
             return make_response(
                 {"message": "User not found.", "error": True}, http.HTTPStatus.NOT_FOUND
             )
-        if user_id != current_user.id:
+        if current_user.role == "user" and user_id != current_user.id:
             return make_response(
                 {
                     "message": "You don't have permission to delete this user.",
