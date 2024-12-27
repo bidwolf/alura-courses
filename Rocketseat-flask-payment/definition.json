@@ -229,6 +229,151 @@
                   }
               }
           }
+      },
+      "/payments/pix/{paymentId}": {
+          "get": {
+              "parameters": [
+                  {
+                      "$ref": "#/components/parameters/paymentId"
+                  }
+              ],
+              "operationId": "getPayment",
+              "summary": "Endpoint to get a payment information.",
+              "responses": {
+                  "200": {
+                      "description": "Payment found",
+                      "headers": {
+                          "Connection": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Content-Length": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Content-Type": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Date": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Server": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Vary": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          }
+                      },
+                      "content": {
+                          "text/html": {
+                              "encoding": {
+                                  "utf-8": {
+                                      "contentType": "text/html"
+                                  }
+                              }
+                          }
+                      }
+                  },
+                  "404": {
+                      "description": "Payment not found",
+                      "headers": {
+                          "Connection": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Content-Length": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Content-Type": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Date": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Server": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Vary": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          }
+                      },
+                      "content": {
+                          "text/html": {
+                              "encoding": {
+                                  "utf-8": {
+                                      "contentType": "text/html"
+                                  }
+                              }
+                          }
+                      }
+                  },
+                  "500": {
+                      "description": "Server error",
+                      "headers": {
+                          "Connection": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Content-Length": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Content-Type": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Date": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Server": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Vary": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          }
+                      },
+                      "content": {
+                          "text/html": {
+                              "encoding": {
+                                  "utf-8": {
+                                      "contentType": "text/html"
+                                  }
+                              }
+                          }
+                      }
+                  }
+              }
+          }
       }
   },
   "components": {
