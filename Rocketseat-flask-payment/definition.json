@@ -374,6 +374,132 @@
                   }
               }
           }
+      },
+      "/payments/pix/qrcode/{filename}": {
+          "get": {
+              "parameters": [
+                  {
+                      "$ref": "#/components/parameters/filename"
+                  }
+              ],
+              "operationId": "getPayment",
+              "summary": "Endpoint to get the QR code of the payment.",
+              "responses": {
+                  "200": {
+                      "description": "QrCode image found",
+                      "headers": {
+                          "Connection": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Content-Length": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Content-Type": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Date": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Server": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Vary": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          }
+                      },
+                      "content": {
+                          "image/png": {
+                              "schema": {
+                                  "type": "string",
+                                  "format": "binary"
+                              }
+                          }
+                      }
+                  },
+                  "404": {
+                      "description": "Qrcode image not found",
+                      "headers": {
+                          "Connection": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Content-Length": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Content-Type": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Date": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Server": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Vary": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          }
+                      }
+                  },
+                  "500": {
+                      "description": "Server error",
+                      "headers": {
+                          "Connection": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Content-Length": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Content-Type": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Date": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Server": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          },
+                          "Vary": {
+                              "schema": {
+                                  "type": "string"
+                              }
+                          }
+                      }
+                  }
+              }
+          }
       }
   },
   "components": {
