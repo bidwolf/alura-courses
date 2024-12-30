@@ -14,5 +14,7 @@
   ],
 "pylint.args": [
     "--rcfile=${workspaceFolder}/.pylintrc"
-]
+],"files.exclude": {
+  "**/__pycache__": true,
+}
 }
