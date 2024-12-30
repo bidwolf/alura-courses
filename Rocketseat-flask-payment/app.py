@@ -1,9 +1,10 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file, render_template
 from http import HTTPStatus
 from repository.database import db
 from datetime import datetime, timedelta
 from models.payment import Payment
 from payments.pix import Pix
+from os import path
 
 app = Flask(__name__)
 app.config.from_pyfile("config.py")
@@ -13,7 +14,7 @@ PAYMENT_EXPIRATION_DELTA_IN_MINUTES = 30
 
 @app.route("/payments/pix", methods=["POST"])
 def create_payment():
-
+    """POST Method to create a payment transaction"""
     data = request.get_json()
     payment_value: float = data.get("value")
     if isinstance(payment_value, int):
@@ -59,7 +60,14 @@ def confirm_payment():
 
 @app.route("/payments/pix/qrcode/<filename>", methods=["GET"])
 def get_qrcode(filename: str):
-    pass
+    """GET Method to send the qrcode image"""
+    directory = Pix.get_qrcode_png(filename=filename)
+    if path.exists(directory):
+        return send_file(Pix.get_qrcode_png(filename=filename))
+    return (
+        jsonify({"message": "This image is not present in the server"}),
+        HTTPStatus.NOT_FOUND,
+    )
 
 
 @app.route("/payments/pix/<int:payment_id>", methods=["GET"])
