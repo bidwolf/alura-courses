@@ -55,7 +55,62 @@ def create_payment():
 
 @app.route("/payments/pix/confirmation", methods=["POST"])
 def confirm_payment():
-    pass
+    """POST Method to send payment confirmation"""
+    data = request.get_json()
+    bank_payment_id = data.get("bank_payment_id")
+    value = data.get("value")
+    if not bank_payment_id:
+        return (
+            jsonify({"message": "The bank_payment_id is required"}),
+            HTTPStatus.BAD_REQUEST,
+        )
+    if not isinstance(bank_payment_id, str):
+        return (
+            jsonify({"message": "The bank_payment_id should be a string"}),
+            HTTPStatus.BAD_REQUEST,
+        )
+    if not value:
+        return (
+            jsonify({"message": "The value is required"}),
+            HTTPStatus.BAD_REQUEST,
+        )
+    if isinstance(value, int):
+        value = float(value)
+    if not isinstance(value, float):
+        return (
+            jsonify({"message": "The value should be a float number"}),
+            HTTPStatus.BAD_REQUEST,
+        )
+    payment = (
+        db.session.query(Payment)
+        .filter(Payment.bank_payment_id == bank_payment_id)
+        .first()
+    )
+    if not payment:
+        return (jsonify({"message": "Cannot find this payment"}), HTTPStatus.NOT_FOUND)
+    if payment.paid:
+        return (
+            jsonify({"message": "Payment has already been confirmed"}),
+            HTTPStatus.CONFLICT,
+        )
+    if payment.value != value:
+        return (
+            jsonify({"message": "Invalid payment data"}),
+            HTTPStatus.METHOD_NOT_ALLOWED,
+        )
+    try:
+        payment.paid = True
+        db.session.commit()
+        return (
+            jsonify({"message": "Payment confirmed successfully"}),
+            HTTPStatus.ACCEPTED,
+        )
+    except Exception as e:
+        db.session.rollback()
+        return (
+            jsonify({"message": "An internal error occurred while confirm payment"}),
+            HTTPStatus.INTERNAL_SERVER_ERROR,
+        )
 
 
 @app.route("/payments/pix/qrcode/<filename>", methods=["GET"])
