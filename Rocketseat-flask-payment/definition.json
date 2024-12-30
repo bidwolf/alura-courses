@@ -1,773 +1,776 @@
 {
-  "openapi": "3.0.0",
-  "info": {
-      "version": "1.0.0",
-      "title": "Flask Payment",
-      "description": "Creating a payment API and stablish a websocket to notify payment status using Flask."
-  },
-  "servers": [
-      {
-          "url": "http://localhost:4444",
-          "description": "The local server for developers work on it",
-          "variables": {
-              "local": {
-                  "description": "The environment variable setup",
-                  "default": "test",
-                  "enum": [
-                      "test",
-                      "prod",
-                      "dev"
-                  ]
-              }
-          }
-      }
-  ],
-  "paths": {
-      "/payments/pix": {
-          "post": {
-              "operationId": "createPayment",
-              "summary": "Endpoint for create a payment transaction.",
-              "requestBody": {
-                  "description": "Fields for create a payment transaction",
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "required": [
-                                  "value"
-                              ],
-                              "properties": {
-                                  "value": {
-                                      "type": "number",
-                                      "description": "The value of the transaction"
-                                  }
-                              }
-                          }
-                      }
-                  },
-                  "required": true
-              },
-              "responses": {
-                  "201": {
-                      "headers": {
-                          "Server": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Date": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Content-Type": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Content-Length": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Vary": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Set-Cookie": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Connection": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          }
-                      },
-                      "description": "The payment transaction has been created",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "required": [
-                                      "id",
-                                      "value",
-                                      "paid",
-                                      "bank_payment_id",
-                                      "qrcode",
-                                      "expiration_date"
-                                  ],
-                                  "properties": {
-                                      "id": {
-                                          "type": "number",
-                                          "description": "The payment id"
-                                      },
-                                      "value": {
-                                          "type": "number",
-                                          "description": "The value of the transaction"
-                                      },
-                                      "paid": {
-                                          "type": "boolean",
-                                          "description": "Return if the transaction was paid"
-                                      },
-                                      "bank_payment_id": {
-                                          "type": "string",
-                                          "format": "uuid",
-                                          "description": "The bank institution responsible to the transaction payment"
-                                      },
-                                      "qrcode": {
-                                          "type": "string",
-                                          "description": "The qrcode identifier to be used in the client"
-                                      },
-                                      "expiration_date": {
-                                          "type": "string",
-                                          "format": "date-time"
-                                      }
-                                  }
-                              }
-                          }
-                      }
-                  },
-                  "400": {
-                      "$ref": "#/components/responses/BadRequest"
-                  },
-                  "500": {
-                      "$ref": "#/components/responses/ServerError"
-                  }
-              }
-          }
-      },
-      "/payments/pix/confirmation": {
-          "post": {
-              "operationId": "createPayment",
-              "summary": "Endpoint for confirm a payment transaction.",
-              "requestBody": {
-                  "description": "Fields for confirm a payment transaction",
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "required": [
-                                  "value",
-                                  "bank_payment_id"
-                              ],
-                              "properties": {
-                                  "value": {
-                                      "type": "number",
-                                      "description": "The value of the transaction"
-                                  },
-                                  "bank_payment_id": {
-                                      "type": "string",
-                                      "description": "The bank institution responsible to the transaction payment"
-                                  }
-                              }
-                          }
-                      }
-                  },
-                  "required": true
-              },
-              "responses": {
-                  "202": {
-                      "headers": {
-                          "Server": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Date": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Content-Type": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Content-Length": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Vary": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Set-Cookie": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Connection": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          }
-                      },
-                      "description": "The payment confirmation request has been accepted ",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "required": [
-                                      "message"
-                                  ],
-                                  "properties": {
-                                      "message": {
-                                          "type": "string",
-                                          "description": "The message confirmation"
-                                      }
-                                  }
-                              }
-                          }
-                      }
-                  },
-                  "400": {
-                      "$ref": "#/components/responses/BadRequest"
-                  },
-                  "500": {
-                      "$ref": "#/components/responses/ServerError"
-                  }
-              }
-          }
-      },
-      "/payments/pix/{paymentId}": {
-          "get": {
-              "parameters": [
-                  {
-                      "$ref": "#/components/parameters/paymentId"
-                  }
-              ],
-              "operationId": "getPayment",
-              "summary": "Endpoint to get a payment information.",
-              "responses": {
-                  "200": {
-                      "description": "Payment found",
-                      "headers": {
-                          "Connection": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Content-Length": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Content-Type": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Date": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Server": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Vary": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          }
-                      },
-                      "content": {
-                          "text/html": {
-                              "encoding": {
-                                  "utf-8": {
-                                      "contentType": "text/html"
-                                  }
-                              }
-                          }
-                      }
-                  },
-                  "404": {
-                      "description": "Payment not found",
-                      "headers": {
-                          "Connection": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Content-Length": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Content-Type": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Date": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Server": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Vary": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          }
-                      },
-                      "content": {
-                          "text/html": {
-                              "encoding": {
-                                  "utf-8": {
-                                      "contentType": "text/html"
-                                  }
-                              }
-                          }
-                      }
-                  },
-                  "500": {
-                      "description": "Server error",
-                      "headers": {
-                          "Connection": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Content-Length": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Content-Type": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Date": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Server": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Vary": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          }
-                      },
-                      "content": {
-                          "text/html": {
-                              "encoding": {
-                                  "utf-8": {
-                                      "contentType": "text/html"
-                                  }
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      },
-      "/payments/pix/qrcode/{filename}": {
-          "get": {
-              "parameters": [
-                  {
-                      "$ref": "#/components/parameters/filename"
-                  }
-              ],
-              "operationId": "getPayment",
-              "summary": "Endpoint to get the QR code of the payment.",
-              "responses": {
-                  "200": {
-                      "description": "QrCode image found",
-                      "headers": {
-                          "Connection": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Content-Length": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Content-Type": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Date": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Server": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Vary": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          }
-                      },
-                      "content": {
-                          "image/png": {
-                              "schema": {
-                                  "type": "string",
-                                  "format": "binary"
-                              }
-                          }
-                      }
-                  },
-                  "404": {
-                      "description": "Qrcode image not found",
-                      "headers": {
-                          "Connection": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Content-Length": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Content-Type": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Date": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Server": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Vary": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          }
-                      }
-                  },
-                  "500": {
-                      "description": "Server error",
-                      "headers": {
-                          "Connection": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Content-Length": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Content-Type": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Date": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Server": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          },
-                          "Vary": {
-                              "schema": {
-                                  "type": "string"
-                              }
-                          }
-                      }
-                  }
-              }
-          }
-      }
-  },
-  "components": {
-      "schemas": {
-          "paymentId": {
-              "description": "The unique identifier of the payment transaction",
-              "type": "integer"
-          },
-          "filename": {
-              "description": "The filename for the qrcode of the payment",
-              "type": "string"
-          },
-          "Response": {
-              "type": "object",
-              "required": [
-                  "message",
-                  "error"
-              ],
-              "properties": {
-                  "message": {
-                      "description": "A human readable error message",
-                      "type": "string"
-                  },
-                  "error": {
-                      "description": "Tells if the current request has errors",
-                      "type": "boolean"
-                  }
-              }
-          }
-      },
-      "parameters": {
-          "paymentId": {
-              "description": "The payment id used in the transaction",
-              "name": "paymentId",
-              "in": "path",
-              "required": true,
-              "schema": {
-                  "$ref": "#/components/schemas/paymentId"
-              }
-          },
-          "filename": {
-              "description": "The filename used to get the qrcode image",
-              "name": "filename",
-              "in": "path",
-              "required": true,
-              "schema": {
-                  "$ref": "#/components/schemas/filename"
-              }
-          }
-      },
-      "requestBodies": {},
-      "headers": {},
-      "responses": {
-          "BadRequest": {
-              "headers": {
-                  "Server": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Date": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Content-Type": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Content-Length": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Vary": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Connection": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  }
-              },
-              "description": "The payload is invalid",
-              "content": {
-                  "application/json": {
-                      "schema": {
-                          "$ref": "#/components/schemas/Response"
-                      }
-                  }
-              }
-          },
-          "Conflict": {
-              "headers": {
-                  "Server": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Date": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Content-Type": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Content-Length": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Vary": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Connection": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  }
-              },
-              "description": "The request has conflicts with the current server state",
-              "content": {
-                  "application/json": {
-                      "schema": {
-                          "$ref": "#/components/schemas/Response"
-                      }
-                  }
-              }
-          },
-          "ServerError": {
-              "headers": {
-                  "Server": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Date": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Content-Type": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Content-Length": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Vary": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Connection": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  }
-              },
-              "description": "Internal server error",
-              "content": {
-                  "application/json": {
-                      "schema": {
-                          "$ref": "#/components/schemas/Response"
-                      }
-                  }
-              }
-          },
-          "Unauthorized": {
-              "headers": {
-                  "Server": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Date": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Content-Type": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Content-Length": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Vary": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Set-Cookie": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Connection": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  }
-              },
-              "description": "Unauthorized",
-              "content": {
-                  "application/json": {
-                      "schema": {
-                          "$ref": "#/components/schemas/Response"
-                      }
-                  }
-              }
-          },
-          "NotFound": {
-              "headers": {
-                  "Server": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Date": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Content-Type": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Content-Length": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Vary": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  },
-                  "Connection": {
-                      "schema": {
-                          "type": "string"
-                      }
-                  }
-              },
-              "description": "Content not found",
-              "content": {
-                  "application/json": {
-                      "schema": {
-                          "$ref": "#/components/schemas/Response"
-                      }
-                  }
-              }
-          }
-      }
-  }
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Flask Payment",
+        "description": "Creating a payment API and stablish a websocket to notify payment status using Flask."
+    },
+    "servers": [
+        {
+            "url": "http://localhost:4444",
+            "description": "The local server for developers work on it",
+            "variables": {
+                "local": {
+                    "description": "The environment variable setup",
+                    "default": "test",
+                    "enum": [
+                        "test",
+                        "prod",
+                        "dev"
+                    ]
+                }
+            }
+        }
+    ],
+    "paths": {
+        "/payments/pix": {
+            "post": {
+                "operationId": "createPayment",
+                "summary": "Endpoint for create a payment transaction.",
+                "requestBody": {
+                    "description": "Fields for create a payment transaction",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "value"
+                                ],
+                                "properties": {
+                                    "value": {
+                                        "type": "number",
+                                        "description": "The value of the transaction"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "headers": {
+                            "Server": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Date": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Type": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Length": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Connection": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "description": "The payment transaction has been created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "message",
+                                        "payment"
+                                    ],
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "payment": {
+                                            "$ref": "#/components/schemas/Payment"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/ServerError"
+                    }
+                }
+            }
+        },
+        "/payments/pix/confirmation": {
+            "post": {
+                "operationId": "createPayment",
+                "summary": "Endpoint for confirm a payment transaction.",
+                "requestBody": {
+                    "description": "Fields for confirm a payment transaction",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "value",
+                                    "bank_payment_id"
+                                ],
+                                "properties": {
+                                    "value": {
+                                        "type": "number",
+                                        "description": "The value of the transaction"
+                                    },
+                                    "bank_payment_id": {
+                                        "type": "string",
+                                        "description": "The bank institution responsible to the transaction payment"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "202": {
+                        "headers": {
+                            "Server": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Date": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Type": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Length": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Vary": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Set-Cookie": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Connection": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "description": "The payment confirmation request has been accepted ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "required": [
+                                        "message"
+                                    ],
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "description": "The message confirmation"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/ServerError"
+                    }
+                }
+            }
+        },
+        "/payments/pix/{paymentId}": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/paymentId"
+                    }
+                ],
+                "operationId": "getPayment",
+                "summary": "Endpoint to get a payment information.",
+                "responses": {
+                    "200": {
+                        "description": "Payment found",
+                        "headers": {
+                            "Connection": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Length": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Type": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Date": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Server": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Vary": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "text/html": {
+                                "encoding": {
+                                    "utf-8": {
+                                        "contentType": "text/html"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Payment not found",
+                        "headers": {
+                            "Connection": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Length": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Type": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Date": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Server": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Vary": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "text/html": {
+                                "encoding": {
+                                    "utf-8": {
+                                        "contentType": "text/html"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "headers": {
+                            "Connection": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Length": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Type": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Date": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Server": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Vary": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "text/html": {
+                                "encoding": {
+                                    "utf-8": {
+                                        "contentType": "text/html"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/payments/pix/qrcode/{filename}": {
+            "get": {
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/filename"
+                    }
+                ],
+                "operationId": "getPayment",
+                "summary": "Endpoint to get the QR code of the payment.",
+                "responses": {
+                    "200": {
+                        "description": "QrCode image found",
+                        "headers": {
+                            "Connection": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Length": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Type": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Date": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Server": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Vary": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "content": {
+                            "image/png": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Qrcode image not found",
+                        "headers": {
+                            "Connection": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Length": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Type": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Date": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Server": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Vary": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "headers": {
+                            "Connection": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Length": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Content-Type": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Date": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Server": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            },
+                            "Vary": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "paymentId": {
+                "description": "The unique identifier of the payment transaction",
+                "type": "integer"
+            },
+            "filename": {
+                "description": "The filename for the qrcode of the payment",
+                "type": "string"
+            },
+            "Response": {
+                "type": "object",
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "description": "A human readable error message",
+                        "type": "string"
+                    }
+                }
+            },
+            "Payment": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "value",
+                    "paid",
+                    "bank_payment_id",
+                    "qrcode",
+                    "expiration_date"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "number",
+                        "description": "The payment id"
+                    },
+                    "value": {
+                        "type": "number",
+                        "multipleOf": 0.1 ,
+                        "description": "The value of the transaction"
+                    },
+                    "paid": {
+                        "type": "boolean",
+                        "description": "Return if the transaction was paid"
+                    },
+                    "bank_payment_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "nullable": true,
+                        "description": "The bank institution responsible to the transaction payment"
+                    },
+                    "qrcode": {
+                        "type": "string",
+                        "nullable": true,
+                        "description": "The qrcode identifier to be used in the client"
+                    },
+                    "expiration_date": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            }
+        },
+        "parameters": {
+            "paymentId": {
+                "description": "The payment id used in the transaction",
+                "name": "paymentId",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "$ref": "#/components/schemas/paymentId"
+                }
+            },
+            "filename": {
+                "description": "The filename used to get the qrcode image",
+                "name": "filename",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "$ref": "#/components/schemas/filename"
+                }
+            }
+        },
+        "requestBodies": {},
+        "headers": {},
+        "responses": {
+            "BadRequest": {
+                "headers": {
+                    "Server": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Date": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Type": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Length": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Vary": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Connection": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "description": "The payload is invalid",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Response"
+                        }
+                    }
+                }
+            },
+            "Conflict": {
+                "headers": {
+                    "Server": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Date": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Type": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Length": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Vary": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Connection": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "description": "The request has conflicts with the current server state",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Response"
+                        }
+                    }
+                }
+            },
+            "ServerError": {
+                "headers": {
+                    "Server": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Date": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Type": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Length": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Vary": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Connection": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "description": "Internal server error",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Response"
+                        }
+                    }
+                }
+            },
+            "Unauthorized": {
+                "headers": {
+                    "Server": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Date": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Type": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Length": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Vary": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Set-Cookie": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Connection": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "description": "Unauthorized",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Response"
+                        }
+                    }
+                }
+            },
+            "NotFound": {
+                "headers": {
+                    "Server": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Date": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Type": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Length": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Vary": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Connection": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "description": "Content not found",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Response"
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
