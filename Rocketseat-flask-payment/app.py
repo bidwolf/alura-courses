@@ -72,7 +72,21 @@ def get_qrcode(filename: str):
 
 @app.route("/payments/pix/<int:payment_id>", methods=["GET"])
 def get_payment(payment_id: int):
-    pass
+    """Send payment page to the client"""
+    try:
+        payment = db.session.query(Payment).filter(Payment.id == payment_id).first()
+        if not payment:
+            return (render_template("404.html"), HTTPStatus.NOT_FOUND)
+        return render_template(
+            "payment.html",
+            payment=payment.to_dict(),
+            host=f"http://127.0.0.1:{app.config["FLASK_RUN_PORT"]}",
+        )
+    except Exception as e:
+        return (
+            jsonify({"message": "Internal server Error"}),
+            HTTPStatus.INTERNAL_SERVER_ERROR,
+        )
 
 
 if __name__ == "__main__":
