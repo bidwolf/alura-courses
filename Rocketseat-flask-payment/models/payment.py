@@ -16,7 +16,7 @@ class Payment(Base):
     def to_dict(self):
         return {
             "id": self.id,
-            "value": self.value,
+            "value": "{:.2f}".format(self.value),
             "paid": self.paid,
             "bank_payment_id": self.bank_payment_id,
             "qrcode": self.qrcode,
