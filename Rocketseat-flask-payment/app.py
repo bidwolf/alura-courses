@@ -5,10 +5,12 @@ from datetime import datetime, timedelta
 from models.payment import Payment
 from payments.pix import Pix
 from os import path
+from flask_socketio import SocketIO, emit
 
 app = Flask(__name__)
 app.config.from_pyfile("config.py")
 db.init_app(app)
+socket_io = SocketIO(app)
 PAYMENT_EXPIRATION_DELTA_IN_MINUTES = 30
 
 
@@ -101,11 +103,13 @@ def confirm_payment():
     try:
         payment.paid = True
         db.session.commit()
+        socket_io.emit(f"payment_confirmation", payment.id)
         return (
             jsonify({"message": "Payment confirmed successfully"}),
             HTTPStatus.ACCEPTED,
         )
     except Exception as e:
+        print(e)
         db.session.rollback()
         return (
             jsonify({"message": "An internal error occurred while confirm payment"}),
@@ -132,6 +136,11 @@ def get_payment(payment_id: int):
         payment = db.session.query(Payment).filter(Payment.id == payment_id).first()
         if not payment:
             return (render_template("404.html"), HTTPStatus.NOT_FOUND)
+        if payment.paid:
+            return render_template(
+                "confirmed_payment.html",
+                payment=payment.to_dict(),
+            )
         return render_template(
             "payment.html",
             payment=payment.to_dict(),
@@ -144,8 +153,20 @@ def get_payment(payment_id: int):
         )
 
 
+@socket_io.on("connect")
+def handle_connect():
+    """Handles the connection event"""
+    print("Client connected")
+
+
+@socket_io.on("disconnect")
+def handle_disconnect():
+    """Handles the disconnection event"""
+    print("Client disconnected from the server")
+
+
 if __name__ == "__main__":
     from dotenv import load_dotenv
 
     load_dotenv()
-    app.run(debug=True, port=app.config["FLASK_RUN_PORT"])
+    socket_io.run(app, debug=True, port=app.config["FLASK_RUN_PORT"])
