@@ -3,6 +3,7 @@ from http import HTTPStatus
 from repository.database import db
 from datetime import datetime, timedelta
 from models.payment import Payment
+from payments.pix import Pix
 
 app = Flask(__name__)
 app.config.from_pyfile("config.py")
@@ -30,7 +31,14 @@ def create_payment():
     expiration_date = datetime.now() + timedelta(
         minutes=PAYMENT_EXPIRATION_DELTA_IN_MINUTES
     )
-    new_payment = Payment(value=data.get("value"), expiration_date=expiration_date)
+    pix = Pix()
+    pix_transaction_details = pix.create_payment()
+    new_payment = Payment(
+        value=data.get("value"),
+        expiration_date=expiration_date,
+        qrcode=pix_transaction_details.get("qrcode_path"),
+        bank_payment_id=pix_transaction_details.get("bank_payment_id"),
+    )
     db.session.add(new_payment)
     db.session.commit()
     return (
