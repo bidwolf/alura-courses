@@ -8,7 +8,7 @@ import qrcode
 class Pix:
     """This is the class that represents a payment method"""
 
-    __static_folder = "static/img"
+    static_folder = "static/img"
     __hash_prefix = "hash_payment_"
     __file_path_prefix = "qr_code_payment_"
 
@@ -25,6 +25,10 @@ class Pix:
         hash_payment = f"{self.__hash_prefix}{bank_payment_id}"
         img = qrcode.make(hash_payment)
         qrcode_path = self.get_qrcode_filepath_from_id(bank_payment_id=bank_payment_id)
-        img.save(f"{self.__static_folder}/{qrcode_path}.png")
-
+        img.save(Pix.get_qrcode_png(filename=qrcode_path))
         return {"qrcode_path": qrcode_path, "bank_payment_id": bank_payment_id}
+
+    @staticmethod
+    def get_qrcode_png(filename: str) -> str:
+        """Return the path of the qrcode image"""
+        return f"{Pix.static_folder}/{filename}.png"
