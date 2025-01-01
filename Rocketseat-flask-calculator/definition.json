@@ -26,7 +26,19 @@
         "/calculators/first": {
             "post": {
                 "requestBody": {
-                    "$ref": "#/components/requestBodies/calculatePayload"
+                    "$ref": "#/components/requestBodies/firstCalculatorBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/SuccessCalculator"
+                    }
+                }
+            }
+        },
+        "/calculators/second": {
+            "post": {
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/secondCalculatorBody"
                 },
                 "responses": {
                     "200": {
@@ -54,8 +66,8 @@
             }
         },
         "requestBodies": {
-            "calculatePayload": {
-                "description": "Calculator payload",
+            "firstCalculatorBody": {
+                "description": "First Calculator payload",
                 "required": true,
                 "content": {
                     "application/json": {
@@ -67,6 +79,28 @@
                                 "number": {
                                     "type": "number",
                                     "multipleOf": 0.1
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "secondCalculatorBody": {
+                "description": "Second Calculator payload",
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "numbers"
+                            ],
+                            "properties": {
+                                "numbers": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "number",
+                                        "multipleOf": 0.01
+                                    }
                                 }
                             }
                         }
