@@ -1,0 +1,287 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Flask Calculator",
+        "description": "Creating a calculator API to learn some Design Patterns using Flask"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:4444",
+            "description": "The local server for developers work on it",
+            "variables": {
+                "local": {
+                    "description": "The environment variable setup",
+                    "default": "test",
+                    "enum": [
+                        "test",
+                        "prod",
+                        "dev"
+                    ]
+                }
+            }
+        }
+    ],
+    "paths": {
+        "/calculators/first": {
+            "post": {
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/calculatePayload"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/SuccessCalculator"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "calculator": {
+                "required": [
+                    "calculator",
+                    "result"
+                ],
+                "properties": {
+                    "calculator": {
+                        "type": "integer"
+                    },
+                    "result": {
+                        "type": "number"
+                    }
+                }
+            }
+        },
+        "requestBodies": {
+            "calculatePayload": {
+                "description": "Calculator payload",
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "number"
+                            ],
+                            "properties": {
+                                "number": {
+                                    "type": "number",
+                                    "multipleOf": 0.1
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "responses": {
+            "SuccessCalculator": {
+                "description": "The number has been calculated correctly",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "data"
+                            ],
+                            "properties": {
+                                "data": {
+                                    "$ref": "#/components/schemas/calculator"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "BadRequest": {
+                "headers": {
+                    "Server": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Date": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Type": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Length": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Connection": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "description": "The payload is invalid",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Response"
+                        }
+                    }
+                }
+            },
+            "Conflict": {
+                "headers": {
+                    "Server": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Date": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Type": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Length": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Connection": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "description": "The request has conflicts with the current server state",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Response"
+                        }
+                    }
+                }
+            },
+            "ServerError": {
+                "headers": {
+                    "Server": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Date": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Type": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Length": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Connection": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "description": "Internal server error",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Response"
+                        }
+                    }
+                }
+            },
+            "Unauthorized": {
+                "headers": {
+                    "Server": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Date": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Type": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Length": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Set-Cookie": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Connection": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "description": "Unauthorized",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Response"
+                        }
+                    }
+                }
+            },
+            "NotFound": {
+                "headers": {
+                    "Server": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Date": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Type": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Length": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Connection": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "description": "Content not found",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Response"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
