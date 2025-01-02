@@ -1,16 +1,23 @@
-import pytest
+"""Test module for the first calculator logic"""
+
 from typing import Dict
+import pytest
+from src.errors.http_bad_request import HttpBadRequestError
+from src.errors.http_unprocessable_entity import HttpUnprocessableEntityError
 from .calculator_1 import FirstCalculator
 
 calculator = FirstCalculator()
 
 
 class MockRequest:
+    """Mock for request purposes"""
+
     def __init__(self, body: Dict):
         self.json = body
 
 
 def test_calculate():
+    """Ensure that the calculator works properly with right arguments"""
     mocked_request = MockRequest({"number": 1})
     response = calculator.calculate(mocked_request)
     print()
@@ -24,16 +31,19 @@ def test_calculate():
 
 
 def test_calculate_without_number_in_body():
-
-    with pytest.raises(ValueError) as exception_info:
+    """Ensure that the bad request error is raised when a body is not present"""
+    with pytest.raises(HttpBadRequestError) as exception_info:
         mocked_request = MockRequest({})
         calculator.calculate(mocked_request)
     assert str(exception_info.value) == "Number is required!"
 
 
 def test_calculate_with_invalid_number_field():
-
-    with pytest.raises(ValueError) as exception_info:
+    """Ensure that the unprocessable entity error is raised when a body is bad formatted"""
+    with pytest.raises(HttpUnprocessableEntityError) as exception_info:
         mocked_request = MockRequest({"number": "a"})
         calculator.calculate(mocked_request)
-    assert str(exception_info.value) == "Number should be float or integer"
+    assert (
+        str(exception_info.value)
+        == "Calculator can't make operations with a non numeric argument"
+    )
