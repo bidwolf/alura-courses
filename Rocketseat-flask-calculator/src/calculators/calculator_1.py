@@ -2,9 +2,10 @@
 
 from typing import Dict
 from flask import Request as FlaskRequest
+from .interfaces.calculator_interface import CalculatorInterface
 
 
-class FirstCalculator:
+class FirstCalculator(CalculatorInterface):
     """This class is responsible to make calculations to solve the first challenge
     A number is divided into 3 equal parts.
     - The first part is divided by 4 and its result is added to 7. After that, the result is squared and multiplied by a value of 0.257.
@@ -13,7 +14,7 @@ class FirstCalculator:
     - Finally, these 3 values are added and the result is given
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     def calculate(self, request: FlaskRequest) -> Dict:
