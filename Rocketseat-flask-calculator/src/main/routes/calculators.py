@@ -32,13 +32,25 @@ def second_calculator():
         return jsonify(error_response), error_response["status_code"]
 
 
-@calc_routes_bp.route("third", methods=[HTTPMethod.POST])
+@calc_routes_bp.route("/third", methods=[HTTPMethod.POST])
 def third_calculator():
     """
     This is the route controller for the third calculator problem
     """
     try:
         calculator = calculator_factory(calculator_type="third")
+        result = calculator.calculate(request=request)
+        return jsonify(result), HTTPStatus.OK
+    except Exception as exception:
+        error_response = handle_errors(error=exception)
+        return jsonify(error_response), error_response["status_code"]
+
+
+@calc_routes_bp.route("/fourth", methods=[HTTPMethod.POST])
+def fourth_calculator():
+    """This is the route controller for the fourth calculator problem"""
+    try:
+        calculator = calculator_factory(calculator_type="fourth")
         result = calculator.calculate(request=request)
         return jsonify(result), HTTPStatus.OK
     except Exception as exception:
