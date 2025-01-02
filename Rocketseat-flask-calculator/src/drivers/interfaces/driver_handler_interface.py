@@ -14,3 +14,7 @@ class DriverHandlerInterface(ABC):
     @abstractmethod
     def variance(self, numbers: List[float]) -> float:
         """This method is responsible to calculate the variance of a list of numbers"""
+
+    @abstractmethod
+    def average(self, numbers: List[float]) -> float:
+        """This method is responsible to calculate the average of a list of numbers"""
