@@ -2,6 +2,8 @@
 
 from typing import Dict
 from flask import Request as FlaskRequest
+from src.errors.http_bad_request import HttpBadRequestError
+from src.errors.http_unprocessable_entity import HttpUnprocessableEntityError
 from .interfaces.calculator_interface import CalculatorInterface
 
 
@@ -37,10 +39,12 @@ class FirstCalculator(CalculatorInterface):
 
     def __validate_data(self, data: Dict) -> float:
         if "number" not in data:
-            raise ValueError("Number is required!")
+            raise HttpBadRequestError("Number is required!")
         input_data = data.get("number")
         if not isinstance(input_data, (float, int)):
-            raise ValueError("Number should be float or integer")
+            raise HttpUnprocessableEntityError(
+                "Calculator can't make operations with a non numeric argument"
+            )
         return input_data
 
     def __format_response(self, result: float) -> Dict:

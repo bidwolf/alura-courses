@@ -3,6 +3,8 @@
 from typing import List, Dict
 from flask import Request as FlaskRequest
 from src.drivers.interfaces.driver_handler_interface import DriverHandlerInterface
+from src.errors.http_bad_request import HttpBadRequestError
+from src.errors.http_unprocessable_entity import HttpUnprocessableEntityError
 from .interfaces.calculator_interface import CalculatorInterface
 
 
@@ -29,7 +31,9 @@ class SecondCalculator(CalculatorInterface):
 
     def __first_step_map_handler(self, number: float) -> float:
         if not isinstance(number, (float, int)):
-            raise ValueError("The numbers field should be a list of numbers")
+            raise HttpUnprocessableEntityError(
+                "Calculator can't make operations in non numeric arguments"
+            )
 
         return (number * 11) ** 0.95
 
@@ -46,7 +50,9 @@ class SecondCalculator(CalculatorInterface):
     def __validate_data(self, body: Dict) -> List[float]:
         """This method is responsible to validate the request body"""
         if not body or not "numbers" in body:
-            raise ValueError("The request body should have a field called numbers")
+            raise HttpBadRequestError(
+                "The request body should have a field called numbers"
+            )
         if not isinstance(body["numbers"], list):
-            raise ValueError("The numbers field should be a list of numbers")
+            raise HttpBadRequestError("The numbers field should be a list of numbers")
         return body["numbers"]
