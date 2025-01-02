@@ -7,6 +7,7 @@ from src.drivers.numpy_handler import NumpyHandler
 from src.calculators.calculator_1 import FirstCalculator
 from src.calculators.calculator_2 import SecondCalculator
 from src.calculators.calculator_3 import ThirdCalculator
+from src.calculators.calculator_4 import FourthCalculator
 from src.calculators.interfaces.calculator_interface import CalculatorInterface
 
 
@@ -24,13 +25,21 @@ def calculator_2_factory():
 
 
 def calculator_3_factory():
-    """This function creates an instance of the second calculator"""
+    """This function creates an instance of the third calculator"""
     calculator = ThirdCalculator(NumpyHandler)
     return calculator
 
 
+def calculator_4_factory():
+    """This function creates an instance of the fourth calculator"""
+    calculator = FourthCalculator(NumpyHandler)
+    return calculator
+
+
 def calculator_factory(
-    calculator_type: Union[Literal["first"], Literal["second"], Literal["third"]]
+    calculator_type: Union[
+        Literal["first"], Literal["second"], Literal["third"], Literal["fourth"]
+    ]
 ) -> CalculatorInterface:
     """
     This function creates an instance of a Calculator Interface based on the given calculator_type
@@ -42,3 +51,5 @@ def calculator_factory(
             return calculator_2_factory()
         case "third":
             return calculator_3_factory()
+        case "fourth":
+            return calculator_4_factory()
