@@ -22,3 +22,13 @@ def second_calculator():
     calculator = calculator_factory(calculator_type="second")
     result = calculator.calculate(request=request)
     return jsonify(result), HTTPStatus.OK
+
+
+@calc_routes_bp.route("third", methods=[HTTPMethod.POST])
+def third_calculator():
+    """
+    This is the route controller for the third calculator problem
+    """
+    calculator = calculator_factory(calculator_type="third")
+    result = calculator.calculate(request=request)
+    return jsonify(result), HTTPStatus.OK

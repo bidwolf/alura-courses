@@ -10,3 +10,7 @@ class DriverHandlerInterface(ABC):
     @abstractmethod
     def standard_derivation(self, numbers: List[float]) -> float:
         """This method is responsible to calculate the standard derivation of a list of numbers"""
+
+    @abstractmethod
+    def variance(self, numbers: List[float]) -> float:
+        """This method is responsible to calculate the variance of a list of numbers"""
