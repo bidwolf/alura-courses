@@ -46,6 +46,18 @@
                     }
                 }
             }
+        },
+        "/calculators/third": {
+            "post": {
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/firstCalculatorBody"
+                },
+                "responses": {
+                     "200": {
+                        "$ref": "#/components/responses/SuccessCalculator"
+                    }
+                }
+            }
         }
     },
     "components": {
