@@ -31,6 +31,15 @@
                 "responses": {
                     "200": {
                         "$ref": "#/components/responses/SuccessCalculator"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/ServerError"
                     }
                 }
             }
@@ -43,6 +52,15 @@
                 "responses": {
                     "200": {
                         "$ref": "#/components/responses/SuccessCalculator"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/ServerError"
                     }
                 }
             }
@@ -53,8 +71,17 @@
                     "$ref": "#/components/requestBodies/firstCalculatorBody"
                 },
                 "responses": {
-                     "200": {
+                    "200": {
                         "$ref": "#/components/responses/SuccessCalculator"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/BadRequest"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/UnprocessableEntity"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/ServerError"
                     }
                 }
             }
@@ -73,6 +100,32 @@
                     },
                     "result": {
                         "type": "number"
+                    }
+                }
+            },
+            "Response": {
+                "required": [
+                    "http_status",
+                    "body"
+                ],
+                "properties": {
+                    "http_status": {
+                        "type": "number"
+                    },
+                    "body": {
+                        "type": "object",
+                        "required": [
+                            "title",
+                            "details"
+                        ],
+                        "properties": {
+                            "title": {
+                                "type": "string"
+                            },
+                            "description": {
+                                "type": "string"
+                            }
+                        }
                     }
                 }
             }
@@ -139,6 +192,43 @@
                 }
             },
             "BadRequest": {
+                "headers": {
+                    "Server": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Date": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Type": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Content-Length": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "Connection": {
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "description": "The payload is invalid",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Response"
+                        }
+                    }
+                }
+            },
+            "UnprocessableEntity": {
                 "headers": {
                     "Server": {
                         "schema": {
