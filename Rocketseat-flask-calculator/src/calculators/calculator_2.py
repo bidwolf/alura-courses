@@ -17,7 +17,7 @@ class SecondCalculator(CalculatorInterface):
     """
 
     def __init__(self, driver: DriverHandlerInterface) -> None:
-        self.driver = driver()
+        self.__driver = driver()
 
     def calculate(self, request: FlaskRequest) -> Dict:
         """This method handles the second calculator logic"""
@@ -39,7 +39,7 @@ class SecondCalculator(CalculatorInterface):
     def __process_data(self, numbers: List[float]) -> float:
         """This method make multiplies each number by 11 and raise then to the power of 0.95."""
         transformed_numbers = [self.__first_step_map_handler(number=n) for n in numbers]
-        std = self.driver.standard_derivation(numbers=transformed_numbers)
+        std = self.__driver.standard_derivation(numbers=transformed_numbers)
         result = 1 / std
         return result
 

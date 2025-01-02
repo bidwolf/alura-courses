@@ -16,6 +16,9 @@ class MockDriverHandler(DriverHandlerInterface):
     def standard_derivation(self, numbers):
         return 3
 
+    def variance(self, numbers):
+        return 1
+
 
 def test_calculate_integration_with_numpy():
     """Should calculator works properly with right data"""
