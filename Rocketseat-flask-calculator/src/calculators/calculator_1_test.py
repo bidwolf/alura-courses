@@ -28,7 +28,7 @@ def test_calculate_without_number_in_body():
     with pytest.raises(ValueError) as exception_info:
         mocked_request = MockRequest({})
         calculator.calculate(mocked_request)
-        assert exception_info == "Number is required!"
+    assert str(exception_info.value) == "Number is required!"
 
 
 def test_calculate_with_invalid_number_field():
@@ -36,4 +36,4 @@ def test_calculate_with_invalid_number_field():
     with pytest.raises(ValueError) as exception_info:
         mocked_request = MockRequest({"number": "a"})
         calculator.calculate(mocked_request)
-        assert exception_info == "Number should be float or integer"
+    assert str(exception_info.value) == "Number should be float or integer"
